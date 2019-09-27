@@ -536,12 +536,13 @@ func TestRandomToFromDecimal128(t *testing.T) {
 	}
 }
 
-func TestJson(t *testing.T) {
+func TestJSON(t *testing.T) {
 	d, err := decimal.FromString("3.33")
 	assert.NoError(t, err)
 
 	buf, err := json.Marshal(d)
 	assert.NoError(t, err)
+	assert.Equal(t, "3.33", string(buf))
 
 	var back decimal.Decimal
 	assert.NoError(t, json.Unmarshal(buf, &back))
