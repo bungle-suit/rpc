@@ -1,6 +1,7 @@
 package decimal_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"strconv"
@@ -533,4 +534,16 @@ func TestRandomToFromDecimal128(t *testing.T) {
 		back := decimal.FromDecimal128(low, high)
 		assert.Equal(t, d, back)
 	}
+}
+
+func TestJson(t *testing.T) {
+	d, err := decimal.FromString("3.33")
+	assert.NoError(t, err)
+
+	buf, err := json.Marshal(d)
+	assert.NoError(t, err)
+
+	var back decimal.Decimal
+	assert.NoError(t, json.Unmarshal(buf, &back))
+	assert.True(t, d.EQ(back))
 }

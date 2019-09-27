@@ -327,6 +327,18 @@ func (d Decimal) IsZero() bool {
 	return d.digits == 0
 }
 
+// MarshalJSON implement json.Marshaler interface
+func (d Decimal) MarshalJSON() ([]byte, error) {
+	return []byte(d.String()), nil
+}
+
+// UnmarshalJSON implement json.Unmarshaler interface
+func (d *Decimal) UnmarshalJSON(buf []byte) error {
+	var err error
+	*d, err = FromString(string(buf))
+	return err
+}
+
 // ToDecimal128 convert to IEEE 754 decimal128
 func (d Decimal) ToDecimal128() (low, high uint64) {
 	sign := d.Sign()
