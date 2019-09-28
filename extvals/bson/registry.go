@@ -24,8 +24,7 @@ func init() {
 	bsoncodec.DefaultValueDecoders{}.RegisterDefaultDecoders(builder)
 
 	builder.
-		RegisterCodec(reflect.TypeOf(decimal.Decimal{}), decimalEncoderDecoder{}).
-		RegisterCodec(reflect.TypeOf(decimal.NullDecimal{}), nullDecimalEncoderDecoder{})
+		RegisterCodec(reflect.TypeOf(decimal.Decimal{}), decimalEncoderDecoder{})
 
 	types := []reflect.Type{
 		reflect.TypeOf(decimal.Decimal0{}),
@@ -43,6 +42,9 @@ func init() {
 	}
 
 	registryNotNull = builder.Build()
+
+	builder.RegisterCodec(
+		reflect.TypeOf(decimal.NullDecimal{}), newNullableCodec(reflect.TypeOf(decimal.Decimal{})))
 
 	types = []reflect.Type{
 		reflect.TypeOf(decimal.NullDecimal0{}),

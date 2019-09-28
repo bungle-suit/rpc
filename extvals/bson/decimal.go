@@ -68,27 +68,6 @@ func (decimalEncoderDecoder) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.V
 	return writeDecimal(w, d)
 }
 
-type nullDecimalEncoderDecoder struct{}
-
-func (nullDecimalEncoderDecoder) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
-	d, err := readNullDecimal(r)
-	if err != nil {
-		return err
-	}
-
-	v.Set(reflect.ValueOf(d))
-	return nil
-}
-
-func (nullDecimalEncoderDecoder) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.ValueWriter, v reflect.Value) error {
-	d, ok := v.Interface().(decimal.NullDecimal)
-	if !ok {
-		return errors.New("Not null decimal value")
-	}
-
-	return writeNullDecimal(w, d)
-}
-
 type decimalEncoderDecoderN struct{}
 
 func (decimalEncoderDecoderN) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
