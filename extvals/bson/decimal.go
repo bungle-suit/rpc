@@ -79,3 +79,32 @@ func (nullDecimalEncoderDecoder) EncodeValue(ctx bsoncodec.EncodeContext, w bson
 
 	return writeDecimal(w, d.Decimal)
 }
+
+type decimalEncoderDecoderN struct{}
+
+func (decimalEncoderDecoderN) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
+	nd, ok := v.Interface().(decimal.Decimaller)
+	if !ok {
+		return errors.New("Not decimal value 4")
+	}
+
+	d, err := readDecimal(r)
+	if err != nil {
+		return err
+	}
+	d = d.Round(int(nd.Scale()))
+
+	val := reflect.ValueOf(d).Convert(v.Type())
+	v.Set(val)
+
+	return nil
+}
+
+func (decimalEncoderDecoderN) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.ValueWriter, v reflect.Value) error {
+	d, ok := v.Interface().(decimal.Decimaller)
+	if !ok {
+		return errors.New("Not decimal value 3")
+	}
+
+	return writeDecimal(w, d.Decimal().Round(int(d.Scale())))
+}
