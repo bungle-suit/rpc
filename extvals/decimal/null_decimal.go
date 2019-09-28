@@ -41,7 +41,7 @@ func (d *NullDecimal) UnmarshalJSON(buf []byte) error {
 }
 
 func (i NullDecimal) IsNull() bool {
-	return i.Valid
+	return !i.Valid
 }
 
 func (i NullDecimal) Val() interface{} {

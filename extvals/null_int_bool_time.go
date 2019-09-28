@@ -31,7 +31,7 @@ type NullTime struct {
 }
 
 func (i NullInt32) IsNull() bool {
-	return i.Valid
+	return !i.Valid
 }
 
 func (i NullInt32) Val() interface{} {
@@ -39,7 +39,7 @@ func (i NullInt32) Val() interface{} {
 }
 
 func (i NullInt64) IsNull() bool {
-	return i.Valid
+	return !i.Valid
 }
 
 func (i NullInt64) Val() interface{} {
@@ -47,7 +47,7 @@ func (i NullInt64) Val() interface{} {
 }
 
 func (i NullBool) IsNull() bool {
-	return i.Valid
+	return !i.Valid
 }
 
 func (i NullBool) Val() interface{} {
@@ -55,7 +55,7 @@ func (i NullBool) Val() interface{} {
 }
 
 func (i NullTime) IsNull() bool {
-	return i.Valid
+	return !i.Valid
 }
 
 func (i NullTime) Val() interface{} {

@@ -7,6 +7,8 @@ package extvals
 //  V: wrapped value
 //  Valid: bool
 //
+// Note: Field v must be the first field, because we access these fields by index
+//
 // Unlike database/sql package NullXXX types, such as NullInt32 have fields:
 //
 //  Int32 int32

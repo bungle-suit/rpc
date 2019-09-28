@@ -2,6 +2,7 @@ package bson
 
 import (
 	"reflect"
+	"time"
 
 	"github.com/bungle-suit/rpc/extvals"
 	"github.com/bungle-suit/rpc/extvals/decimal"
@@ -12,6 +13,9 @@ var (
 	// Registry is bson encoder/decoder for marshal value between mongo-db,
 	// contains standard types and my extsion types.
 	Registry *bsoncodec.Registry
+
+	// registry used to lookup non-nullable bson codecs
+	registryNotNull *bsoncodec.Registry
 )
 
 func init() {
@@ -38,6 +42,8 @@ func init() {
 		builder.RegisterCodec(t, decimalEncoderDecoderN{})
 	}
 
+	registryNotNull = builder.Build()
+
 	types = []reflect.Type{
 		reflect.TypeOf(decimal.NullDecimal0{}),
 		reflect.TypeOf(decimal.NullDecimal1{}),
@@ -54,9 +60,13 @@ func init() {
 	}
 
 	builder.RegisterCodec(
-		reflect.TypeOf(extvals.NullInt32{}), nullInt32Codec{})
+		reflect.TypeOf(extvals.NullInt32{}), newNullableCodec(reflect.TypeOf(int32(0))))
 	builder.RegisterCodec(
-		reflect.TypeOf(extvals.NullInt64{}), nullInt64Codec{})
+		reflect.TypeOf(extvals.NullInt64{}), newNullableCodec(reflect.TypeOf(int64(0))))
+	builder.RegisterCodec(
+		reflect.TypeOf(extvals.NullBool{}), newNullableCodec(reflect.TypeOf(true)))
+	builder.RegisterCodec(
+		reflect.TypeOf(extvals.NullTime{}), newNullableCodec(reflect.TypeOf(time.Time{})))
 
 	Registry = builder.Build()
 }
