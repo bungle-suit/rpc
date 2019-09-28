@@ -10,6 +10,14 @@
   version = "v1.1.1"
 
 [[projects]]
+  digest = "1:586ea76dbd0374d6fb649a91d70d652b7fe0ccffb8910a77468e7702e7901f3d"
+  name = "github.com/go-stack/stack"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2fee6af1a9795aafbe0253a0cfbdf668e1fb8a9a"
+  version = "v1.8.0"
+
+[[projects]]
   digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
@@ -26,6 +34,21 @@
   version = "v1.4.0"
 
 [[projects]]
+  digest = "1:8458b1a19a304c09d8f109a9463a419f703e3d1a81615afcaf3593dcce6749b9"
+  name = "go.mongodb.org/mongo-driver"
+  packages = [
+    "bson",
+    "bson/bsoncodec",
+    "bson/bsonrw",
+    "bson/bsontype",
+    "bson/primitive",
+    "x/bsonx/bsoncore",
+  ]
+  pruneopts = "UT"
+  revision = "c520d023af0a89aec8b7f97717b52da270df2c38"
+  version = "v1.1.1"
+
+[[projects]]
   digest = "1:4d2e5a73dc1500038e504a8d78b986630e3626dc027bc030ba5c75da257cdb96"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -36,6 +59,13 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  input-imports = ["github.com/stretchr/testify/assert"]
+  input-imports = [
+    "github.com/stretchr/testify/assert",
+    "go.mongodb.org/mongo-driver/bson",
+    "go.mongodb.org/mongo-driver/bson/bsoncodec",
+    "go.mongodb.org/mongo-driver/bson/bsonrw",
+    "go.mongodb.org/mongo-driver/bson/bsontype",
+    "go.mongodb.org/mongo-driver/bson/primitive",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
