@@ -30,6 +30,25 @@ func writeDecimal(w bsonrw.ValueWriter, d decimal.Decimal) error {
 	return w.WriteDecimal128(primitive.NewDecimal128(h, l))
 }
 
+func readNullDecimal(r bsonrw.ValueReader) (d decimal.NullDecimal, err error) {
+	if r.Type() == bsontype.Null {
+		err = r.ReadNull()
+		return
+	}
+
+	v, err := readDecimal(r)
+	d = decimal.NullDecimal{v, true}
+	return
+}
+
+func writeNullDecimal(w bsonrw.ValueWriter, d decimal.NullDecimal) error {
+	if !d.Valid {
+		return w.WriteNull()
+	}
+
+	return writeDecimal(w, d.Decimal)
+}
+
 func (decimalEncoderDecoder) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
 	d, err := readDecimal(r)
 	if err != nil {
@@ -52,18 +71,12 @@ func (decimalEncoderDecoder) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.V
 type nullDecimalEncoderDecoder struct{}
 
 func (nullDecimalEncoderDecoder) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
-	if r.Type() == bsontype.Null {
-		r.ReadNull()
-		v.Set(reflect.ValueOf(decimal.NullDecimal{}))
-		return nil
-	}
-
-	d, err := readDecimal(r)
+	d, err := readNullDecimal(r)
 	if err != nil {
 		return err
 	}
 
-	v.Set(reflect.ValueOf(decimal.NullDecimal{d, true}))
+	v.Set(reflect.ValueOf(d))
 	return nil
 }
 
@@ -73,11 +86,7 @@ func (nullDecimalEncoderDecoder) EncodeValue(ctx bsoncodec.EncodeContext, w bson
 		return errors.New("Not null decimal value")
 	}
 
-	if !d.Valid {
-		return w.WriteNull()
-	}
-
-	return writeDecimal(w, d.Decimal)
+	return writeNullDecimal(w, d)
 }
 
 type decimalEncoderDecoderN struct{}
@@ -107,4 +116,45 @@ func (decimalEncoderDecoderN) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.
 	}
 
 	return writeDecimal(w, d.Decimal().Round(int(d.Scale())))
+}
+
+type nullDecimalEncoderDecoderN struct{}
+
+func (nullDecimalEncoderDecoderN) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
+	nd, ok := v.Interface().(decimal.NullDecimaller)
+	if !ok {
+		return errors.New("Not decimal value 5")
+	}
+
+	d, err := readNullDecimal(r)
+	if err != nil {
+		return err
+	}
+	if d.Valid && d.Decimal.Scale() != nd.Scale() {
+		d = decimal.NullDecimal{
+			d.Decimal.Round(int(nd.Scale())),
+			d.Valid,
+		}
+	}
+
+	val := reflect.ValueOf(d).Convert(v.Type())
+	v.Set(val)
+	return nil
+}
+
+func (nullDecimalEncoderDecoderN) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.ValueWriter, v reflect.Value) error {
+	nd, ok := v.Interface().(decimal.NullDecimaller)
+	if !ok {
+		return errors.New("Not decimal value 6")
+	}
+
+	d := nd.NullDecimal()
+	if d.Valid && d.Decimal.Scale() != nd.Scale() {
+		d = decimal.NullDecimal{
+			d.Decimal.Round(int(nd.Scale())),
+			d.Valid,
+		}
+	}
+
+	return writeNullDecimal(w, d)
 }

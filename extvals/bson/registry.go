@@ -37,5 +37,20 @@ func init() {
 		builder.RegisterCodec(t, decimalEncoderDecoderN{})
 	}
 
+	types = []reflect.Type{
+		reflect.TypeOf(decimal.NullDecimal0{}),
+		reflect.TypeOf(decimal.NullDecimal1{}),
+		reflect.TypeOf(decimal.NullDecimal2{}),
+		reflect.TypeOf(decimal.NullDecimal3{}),
+		reflect.TypeOf(decimal.NullDecimal4{}),
+		reflect.TypeOf(decimal.NullDecimal5{}),
+		reflect.TypeOf(decimal.NullDecimal6{}),
+		reflect.TypeOf(decimal.NullDecimal7{}),
+		reflect.TypeOf(decimal.NullDecimal8{}),
+	}
+	for _, t := range types {
+		builder.RegisterCodec(t, nullDecimalEncoderDecoderN{})
+	}
+
 	Registry = builder.Build()
 }

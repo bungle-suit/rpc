@@ -81,3 +81,25 @@ func TestDecimalN(t *testing.T) {
 		assert.Equal(t, decimal.Decimal2(decimal.Decimal(v.ID).Round(2)), back.ID)
 	}
 }
+
+func TestNullDecimalN(t *testing.T) {
+	for _, s := range []string{"nil", "0", "-12345.7890", "1234567890123456"} {
+		v := struct{ ID decimal.NullDecimal2 }{}
+		back := v
+
+		if s != "nil" {
+			v.ID = decimal.NullDecimal2(decimal.NullDecimal{parseDecimal(s), true})
+		}
+		buf, err := bson.MarshalWithRegistry(mybson.Registry, v)
+		assert.NoError(t, err)
+
+		assert.NoError(t, bson.UnmarshalWithRegistry(mybson.Registry, buf, &back))
+		if s == "nil" {
+			assert.Equal(t, decimal.NullDecimal2{}, back.ID)
+		} else {
+			assert.Equal(t,
+				decimal.NullDecimal2(decimal.NullDecimal{v.ID.Decimal.Round(2), true}),
+				back.ID)
+		}
+	}
+}
