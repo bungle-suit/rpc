@@ -92,7 +92,7 @@ func TestNullBool(t *testing.T) {
 	}
 }
 
-func _TestNullTime(t *testing.T) {
+func TestNullTime(t *testing.T) {
 	tests := []extvals.NullTime{
 		{},
 		{time.Date(2019, 9, 28, 4, 5, 6, 0, time.Local), true},

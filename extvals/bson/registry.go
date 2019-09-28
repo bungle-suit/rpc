@@ -25,7 +25,8 @@ func init() {
 
 	builder.
 		RegisterCodec(reflect.TypeOf(decimal.Decimal{}), decimalEncoderDecoder{}).
-		RegisterCodec(reflect.TypeOf(decimal.NullDecimal{}), nullDecimalEncoderDecoder{})
+		RegisterCodec(reflect.TypeOf(decimal.NullDecimal{}), nullDecimalEncoderDecoder{}).
+		RegisterCodec(reflect.TypeOf(time.Time{}), timeCodec{})
 
 	types := []reflect.Type{
 		reflect.TypeOf(decimal.Decimal0{}),
