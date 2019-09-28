@@ -4,13 +4,13 @@ import "bytes"
 
 // NullDecimal nullable decimal value
 type NullDecimal struct {
-	Decimal Decimal
-	Valid   bool // Valid is true if current value is not NULL
+	V     Decimal
+	Valid bool // Valid is true if current value is not NULL
 }
 
 func (d NullDecimal) String() string {
 	if d.Valid {
-		return d.Decimal.String()
+		return d.V.String()
 	}
 	return ""
 }
@@ -21,7 +21,7 @@ func (d NullDecimal) MarshalJSON() ([]byte, error) {
 		return []byte("null"), nil
 	}
 
-	return d.Decimal.MarshalJSON()
+	return d.V.MarshalJSON()
 }
 
 // UnmarshalJSON implement json.Unmarshaler interface
@@ -45,5 +45,5 @@ func (i NullDecimal) IsNull() bool {
 }
 
 func (i NullDecimal) Val() interface{} {
-	return i.Decimal
+	return i.V
 }

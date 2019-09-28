@@ -98,7 +98,7 @@ func TestNullDecimalN(t *testing.T) {
 			assert.Equal(t, decimal.NullDecimal2{}, back.ID)
 		} else {
 			assert.Equal(t,
-				decimal.NullDecimal2(decimal.NullDecimal{v.ID.Decimal.Round(2), true}),
+				decimal.NullDecimal2(decimal.NullDecimal{v.ID.V.Round(2), true}),
 				back.ID)
 		}
 	}

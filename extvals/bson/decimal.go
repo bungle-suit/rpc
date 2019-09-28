@@ -46,7 +46,7 @@ func writeNullDecimal(w bsonrw.ValueWriter, d decimal.NullDecimal) error {
 		return w.WriteNull()
 	}
 
-	return writeDecimal(w, d.Decimal)
+	return writeDecimal(w, d.V)
 }
 
 func (decimalEncoderDecoder) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
@@ -130,9 +130,9 @@ func (nullDecimalEncoderDecoderN) DecodeValue(ctx bsoncodec.DecodeContext, r bso
 	if err != nil {
 		return err
 	}
-	if d.Valid && d.Decimal.Scale() != nd.Scale() {
+	if d.Valid && d.V.Scale() != nd.Scale() {
 		d = decimal.NullDecimal{
-			d.Decimal.Round(int(nd.Scale())),
+			d.V.Round(int(nd.Scale())),
 			d.Valid,
 		}
 	}
@@ -149,9 +149,9 @@ func (nullDecimalEncoderDecoderN) EncodeValue(ctx bsoncodec.EncodeContext, w bso
 	}
 
 	d := nd.NullDecimal()
-	if d.Valid && d.Decimal.Scale() != nd.Scale() {
+	if d.Valid && d.V.Scale() != nd.Scale() {
 		d = decimal.NullDecimal{
-			d.Decimal.Round(int(nd.Scale())),
+			d.V.Round(int(nd.Scale())),
 			d.Valid,
 		}
 	}

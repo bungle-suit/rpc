@@ -32,7 +32,7 @@ func (nullInt32Codec) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.ValueWri
 	if !i.Valid {
 		return w.WriteNull()
 	}
-	return w.WriteInt32(i.Int32)
+	return w.WriteInt32(i.V)
 }
 
 type nullInt64Codec struct{}
@@ -57,5 +57,31 @@ func (nullInt64Codec) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.ValueWri
 	if !i.Valid {
 		return w.WriteNull()
 	}
-	return w.WriteInt64(i.Int64)
+	return w.WriteInt64(i.V)
+}
+
+type nullableCodec struct {
+	inner bsoncodec.ValueCodec
+}
+
+func (nc nullableCodec) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueReader, v reflect.Value) error {
+	if r.Type() == bsontype.Null {
+		v.Set(reflect.Zero(v.Type()))
+		return r.ReadNull()
+	}
+
+	// v.Set(reflect.ValueOf(extvals.NullInt64{i, true}))
+	return nil
+}
+
+func (nc nullableCodec) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.ValueWriter, v reflect.Value) error {
+	i, ok := v.Interface().(extvals.NullInt64)
+	if !ok {
+		return errors.New("Not NullInt64")
+	}
+
+	if !i.Valid {
+		return w.WriteNull()
+	}
+	return w.WriteInt64(i.V)
 }

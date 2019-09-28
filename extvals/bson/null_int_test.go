@@ -26,7 +26,7 @@ func TestNullInt32(t *testing.T) {
 		if !item.Valid {
 			assert.Nil(t, doc["a"])
 		} else {
-			assert.Equal(t, item.Int32, doc["a"])
+			assert.Equal(t, item.V, doc["a"])
 		}
 
 		back := rec
@@ -53,7 +53,7 @@ func TestNullInt64(t *testing.T) {
 		if !item.Valid {
 			assert.Nil(t, doc["a"])
 		} else {
-			assert.Equal(t, item.Int64, doc["a"])
+			assert.Equal(t, item.V, doc["a"])
 		}
 
 		back := rec

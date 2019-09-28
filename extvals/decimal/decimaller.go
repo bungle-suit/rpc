@@ -42,8 +42,8 @@ func unmarshalJSONN(pv *NullDecimal, scale int, buf []byte) error {
 		return err
 	}
 
-	if pv.Valid && pv.Decimal.Scale() != uint8(scale) {
-		pv.Decimal = pv.Decimal.Round(scale)
+	if pv.Valid && pv.V.Scale() != uint8(scale) {
+		pv.V = pv.V.Round(scale)
 	}
 	return nil
 }
@@ -539,7 +539,7 @@ func (i NullDecimal0) IsNull() bool {
 }
 
 func (i NullDecimal0) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal1) IsNull() bool {
@@ -547,7 +547,7 @@ func (i NullDecimal1) IsNull() bool {
 }
 
 func (i NullDecimal1) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal2) IsNull() bool {
@@ -555,7 +555,7 @@ func (i NullDecimal2) IsNull() bool {
 }
 
 func (i NullDecimal2) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal3) IsNull() bool {
@@ -563,7 +563,7 @@ func (i NullDecimal3) IsNull() bool {
 }
 
 func (i NullDecimal3) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal4) IsNull() bool {
@@ -571,7 +571,7 @@ func (i NullDecimal4) IsNull() bool {
 }
 
 func (i NullDecimal4) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal5) IsNull() bool {
@@ -579,7 +579,7 @@ func (i NullDecimal5) IsNull() bool {
 }
 
 func (i NullDecimal5) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal6) IsNull() bool {
@@ -587,7 +587,7 @@ func (i NullDecimal6) IsNull() bool {
 }
 
 func (i NullDecimal6) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal7) IsNull() bool {
@@ -595,7 +595,7 @@ func (i NullDecimal7) IsNull() bool {
 }
 
 func (i NullDecimal7) Val() interface{} {
-	return i.Decimal
+	return i.V
 }
 
 func (i NullDecimal8) IsNull() bool {
@@ -603,5 +603,5 @@ func (i NullDecimal8) IsNull() bool {
 }
 
 func (i NullDecimal8) Val() interface{} {
-	return i.Decimal
+	return i.V
 }

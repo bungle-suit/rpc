@@ -5,28 +5,28 @@ import "time"
 // NullInt32 represents a int32 value that may be null. Similar to
 // database/sql.NullInt64.
 type NullInt32 struct {
-	Int32 int32
+	V     int32
 	Valid bool // Valid is true if Int32 is not NULL
 }
 
 // NullInt64 represents a int32 value that may be null. Similar to
 // database/sql.NullInt64.
 type NullInt64 struct {
-	Int64 int64
+	V     int64
 	Valid bool
 }
 
 // NullBool represents a bool value that may be null. Similar to
 // database/sql.NullInt64.
 type NullBool struct {
-	Bool  bool
+	V     bool
 	Valid bool
 }
 
 // NullTime represents a time value that may be null. Similar to
 // database/sql.NullInt64.
 type NullTime struct {
-	Time  time.Time
+	V     time.Time
 	Valid bool
 }
 
@@ -35,7 +35,7 @@ func (i NullInt32) IsNull() bool {
 }
 
 func (i NullInt32) Val() interface{} {
-	return i.Int32
+	return i.V
 }
 
 func (i NullInt64) IsNull() bool {
@@ -43,7 +43,7 @@ func (i NullInt64) IsNull() bool {
 }
 
 func (i NullInt64) Val() interface{} {
-	return i.Int64
+	return i.V
 }
 
 func (i NullBool) IsNull() bool {
@@ -51,7 +51,7 @@ func (i NullBool) IsNull() bool {
 }
 
 func (i NullBool) Val() interface{} {
-	return i.Bool
+	return i.V
 }
 
 func (i NullTime) IsNull() bool {
@@ -59,5 +59,5 @@ func (i NullTime) IsNull() bool {
 }
 
 func (i NullTime) Val() interface{} {
-	return i.Time
+	return i.V
 }
