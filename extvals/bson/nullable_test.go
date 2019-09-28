@@ -95,7 +95,7 @@ func TestNullBool(t *testing.T) {
 func TestNullTime(t *testing.T) {
 	tests := []extvals.NullTime{
 		{},
-		{time.Date(2019, 9, 28, 4, 5, 6, 0, time.Local), true},
+		{time.Date(2019, 9, 28, 4, 5, 6, 0, time.UTC), true},
 	}
 
 	for _, item := range tests {
@@ -108,7 +108,7 @@ func TestNullTime(t *testing.T) {
 		if !item.Valid {
 			assert.Nil(t, doc["a"])
 		} else {
-			assert.Equal(t, item.V, doc["a"].(primitive.DateTime).Time().Local())
+			assert.Equal(t, item.V, doc["a"].(primitive.DateTime).Time().UTC())
 		}
 
 		back := rec
