@@ -23,6 +23,8 @@ func TestBasicTypes(t *testing.T) {
 		{"datetime", ast.DateTime, false},
 		{"table", ast.Table, false},
 		{"object", ast.Object, false},
+		{"refID", ast.RefID, false},
+		{"id", ast.ID, false},
 		{"int?", ast.Int32, true},
 		{"long?", ast.Int64, true},
 		{"bool?", ast.Bool, true},
@@ -113,7 +115,7 @@ func TestRpcObject(t *testing.T) {
 func TestNotAllowedNullTypes(t *testing.T) {
 	tests := []string{
 		"str?", "void?", "table?", "[int]?", "[str?]",
-		"{str:int}?",
+		"{str:int}?", "refID?", "id?",
 	}
 	for _, ts := range tests {
 		_, err := ast.Parse(ts)

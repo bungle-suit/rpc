@@ -19,6 +19,10 @@ const (
 	List
 	Dict
 	RpcObject
+	// Map to ID type, id of referenced of entity object.
+	RefID
+	// Map to ID type, id of current entity object.
+	ID
 )
 
 // Node ast node interface
@@ -31,7 +35,7 @@ type Node interface {
 	// 'void' type always to be null, its type string not end with '?', so Nullable()
 	// returns false either.
 	//
-	// 'str', 'list', 'dict', 'table', use of empty values, these types are not
+	// 'str', 'list', 'dict', 'table', 'refID' use of empty values, these types are not
 	// allowed to be null.
 	//
 	// Other types are allow to be nullable, includes 'object', 'rpcObject'.
