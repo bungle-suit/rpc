@@ -3,6 +3,7 @@ package bson
 import (
 	"reflect"
 
+	"github.com/bungle-suit/rpc/extvals"
 	"github.com/bungle-suit/rpc/extvals/decimal"
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 )
@@ -51,6 +52,11 @@ func init() {
 	for _, t := range types {
 		builder.RegisterCodec(t, nullDecimalEncoderDecoderN{})
 	}
+
+	builder.RegisterCodec(
+		reflect.TypeOf(extvals.NullInt32{}), nullInt32Codec{})
+	builder.RegisterCodec(
+		reflect.TypeOf(extvals.NullInt64{}), nullInt64Codec{})
 
 	Registry = builder.Build()
 }
