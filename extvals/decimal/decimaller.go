@@ -1,10 +1,5 @@
 package decimal
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 // Decimaller interface implemented by all DecimalX alias types
 type Decimaller interface {
 	// Decimal returns its decimal value.
@@ -539,66 +534,74 @@ func (d NullDecimal8) String() string {
 	return NullDecimal(d).String()
 }
 
-// CheckScale checks DecimalN value's scale matches to its type
-// causedBy argument specify CausedBy of returned error.
-func CheckScale(d Decimaller) error {
-	if d.Scale() != d.Decimal().Scale() {
-		return fmt.Errorf("Mismatched decimaller scale, %d %d", d.Scale(), d.Decimal().Scale())
-	}
-	return nil
+func (i NullDecimal0) IsNull() bool {
+	return i.Valid
 }
 
-// CheckScaleNull checks NullDecimalN value's scale matches to its type
-// causedBy argument specify CausedBy of returned error.
-func CheckScaleNull(d NullDecimaller) error {
-	if !d.NullDecimal().Valid {
-		return nil
-	}
-
-	if d.Scale() != d.NullDecimal().Decimal.Scale() {
-		return fmt.Errorf("Mismatched null decimaller scale, %d %d", d.Scale(), d.NullDecimal().Decimal.Scale())
-	}
-	return nil
+func (i NullDecimal0) Val() interface{} {
+	return i.Decimal
 }
 
-var (
-	_ json.Marshaler = Decimal0{}
-	_ json.Marshaler = Decimal1{}
-	_ json.Marshaler = Decimal2{}
-	_ json.Marshaler = Decimal3{}
-	_ json.Marshaler = Decimal4{}
-	_ json.Marshaler = Decimal5{}
-	_ json.Marshaler = Decimal6{}
-	_ json.Marshaler = Decimal7{}
-	_ json.Marshaler = Decimal8{}
+func (i NullDecimal1) IsNull() bool {
+	return i.Valid
+}
 
-	_ json.Unmarshaler = &Decimal0{}
-	_ json.Unmarshaler = &Decimal1{}
-	_ json.Unmarshaler = &Decimal2{}
-	_ json.Unmarshaler = &Decimal3{}
-	_ json.Unmarshaler = &Decimal4{}
-	_ json.Unmarshaler = &Decimal5{}
-	_ json.Unmarshaler = &Decimal6{}
-	_ json.Unmarshaler = &Decimal7{}
-	_ json.Unmarshaler = &Decimal8{}
+func (i NullDecimal1) Val() interface{} {
+	return i.Decimal
+}
 
-	_ json.Marshaler = NullDecimal0{}
-	_ json.Marshaler = NullDecimal1{}
-	_ json.Marshaler = NullDecimal2{}
-	_ json.Marshaler = NullDecimal3{}
-	_ json.Marshaler = NullDecimal4{}
-	_ json.Marshaler = NullDecimal5{}
-	_ json.Marshaler = NullDecimal6{}
-	_ json.Marshaler = NullDecimal7{}
-	_ json.Marshaler = NullDecimal8{}
+func (i NullDecimal2) IsNull() bool {
+	return i.Valid
+}
 
-	_ json.Unmarshaler = &NullDecimal0{}
-	_ json.Unmarshaler = &NullDecimal1{}
-	_ json.Unmarshaler = &NullDecimal2{}
-	_ json.Unmarshaler = &NullDecimal3{}
-	_ json.Unmarshaler = &NullDecimal4{}
-	_ json.Unmarshaler = &NullDecimal5{}
-	_ json.Unmarshaler = &NullDecimal6{}
-	_ json.Unmarshaler = &NullDecimal7{}
-	_ json.Unmarshaler = &NullDecimal8{}
-)
+func (i NullDecimal2) Val() interface{} {
+	return i.Decimal
+}
+
+func (i NullDecimal3) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullDecimal3) Val() interface{} {
+	return i.Decimal
+}
+
+func (i NullDecimal4) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullDecimal4) Val() interface{} {
+	return i.Decimal
+}
+
+func (i NullDecimal5) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullDecimal5) Val() interface{} {
+	return i.Decimal
+}
+
+func (i NullDecimal6) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullDecimal6) Val() interface{} {
+	return i.Decimal
+}
+
+func (i NullDecimal7) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullDecimal7) Val() interface{} {
+	return i.Decimal
+}
+
+func (i NullDecimal8) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullDecimal8) Val() interface{} {
+	return i.Decimal
+}

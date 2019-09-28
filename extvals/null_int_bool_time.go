@@ -29,3 +29,35 @@ type NullTime struct {
 	Time  time.Time
 	Valid bool
 }
+
+func (i NullInt32) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullInt32) Val() interface{} {
+	return i.Int32
+}
+
+func (i NullInt64) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullInt64) Val() interface{} {
+	return i.Int64
+}
+
+func (i NullBool) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullBool) Val() interface{} {
+	return i.Bool
+}
+
+func (i NullTime) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullTime) Val() interface{} {
+	return i.Time
+}

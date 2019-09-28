@@ -39,3 +39,11 @@ func (d *NullDecimal) UnmarshalJSON(buf []byte) error {
 	*d = NullDecimal{v, true}
 	return nil
 }
+
+func (i NullDecimal) IsNull() bool {
+	return i.Valid
+}
+
+func (i NullDecimal) Val() interface{} {
+	return i.Decimal
+}
