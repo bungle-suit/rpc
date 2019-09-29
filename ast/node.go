@@ -63,7 +63,7 @@ func (n BasicNode) String() string {
 type ItemNode struct {
 	BasicNode
 
-	Item Node
+	Item string
 }
 
 // DecimalNode describe decimal node.

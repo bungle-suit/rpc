@@ -48,26 +48,16 @@ func Parse(ts string) (Node, error) {
 	}
 
 	if strings.HasPrefix(absTS, "[") && strings.HasSuffix(absTS, "]") {
-		itemNode, err := Parse(absTS[1 : len(absTS)-1])
-		if err != nil {
-			return nil, err
-		}
-
 		return checkNotAllowNull(ItemNode{
 			BasicNode{List, nullable, ts},
-			itemNode,
+			absTS[1 : len(absTS)-1],
 		})
 	}
 
 	if strings.HasPrefix(absTS, "{str:") && strings.HasSuffix(absTS, "}") {
-		itemNode, err := Parse(absTS[5 : len(absTS)-1])
-		if err != nil {
-			return nil, err
-		}
-
 		return checkNotAllowNull(ItemNode{
 			BasicNode{Dict, nullable, ts},
-			itemNode,
+			absTS[5 : len(absTS)-1],
 		})
 	}
 

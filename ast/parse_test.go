@@ -71,7 +71,7 @@ func TestList(t *testing.T) {
 		assert.Equal(t, ts, n.String())
 
 		itemNode := n.(ast.ItemNode)
-		assert.Equal(t, itemTS, itemNode.Item.String())
+		assert.Equal(t, itemTS, itemNode.Item)
 	}
 }
 
@@ -86,7 +86,7 @@ func TestDict(t *testing.T) {
 		assert.Equal(t, ts, n.String())
 
 		itemNode := n.(ast.ItemNode)
-		assert.Equal(t, itemTS, itemNode.Item.String())
+		assert.Equal(t, itemTS, itemNode.Item)
 	}
 }
 
@@ -112,8 +112,7 @@ func TestRpcObject(t *testing.T) {
 
 func TestNotAllowedNullTypes(t *testing.T) {
 	tests := []string{
-		"str?", "void?", "table?", "[int]?", "[str?]",
-		"{str:int}?",
+		"str?", "void?", "table?", "[int]?", "{str:int}?",
 	}
 	for _, ts := range tests {
 		_, err := ast.Parse(ts)
