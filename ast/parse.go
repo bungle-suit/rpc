@@ -17,13 +17,10 @@ var (
 		"datetime": DateTime,
 		"table":    Table,
 		"object":   Object,
-		"refID":    RefID,
-		"id":       ID,
 	}
 
 	notAllowNullTypes = map[NodeType]bool{
 		Void: true, String: true, Table: true, List: true, Dict: true,
-		RefID: true, ID: true,
 	}
 
 	decimalPattern   = regexp.MustCompile(`^decimal(\([0-8]\))$`)
