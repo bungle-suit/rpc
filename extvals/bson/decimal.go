@@ -37,7 +37,7 @@ func readNullDecimal(r bsonrw.ValueReader) (d decimal.NullDecimal, err error) {
 	}
 
 	v, err := readDecimal(r)
-	d = decimal.NullDecimal{v, true}
+	d = decimal.NullDecimal{V: v, Valid: true}
 	return
 }
 
@@ -111,8 +111,8 @@ func (nullDecimalEncoderDecoderN) DecodeValue(ctx bsoncodec.DecodeContext, r bso
 	}
 	if d.Valid && d.V.Scale() != nd.Scale() {
 		d = decimal.NullDecimal{
-			d.V.Round(int(nd.Scale())),
-			d.Valid,
+			V:     d.V.Round(int(nd.Scale())),
+			Valid: d.Valid,
 		}
 	}
 
@@ -130,8 +130,8 @@ func (nullDecimalEncoderDecoderN) EncodeValue(ctx bsoncodec.EncodeContext, w bso
 	d := nd.NullDecimal()
 	if d.Valid && d.V.Scale() != nd.Scale() {
 		d = decimal.NullDecimal{
-			d.V.Round(int(nd.Scale())),
-			d.Valid,
+			V:     d.V.Round(int(nd.Scale())),
+			Valid: d.Valid,
 		}
 	}
 

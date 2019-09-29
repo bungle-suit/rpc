@@ -14,8 +14,8 @@ import (
 func TestNullInt32(t *testing.T) {
 	tests := []extvals.NullInt32{
 		{},
-		{32, true},
-		{-32, true},
+		{V: 32, Valid: true},
+		{V: -32, Valid: true},
 	}
 
 	for _, item := range tests {
@@ -41,8 +41,8 @@ func TestNullInt32(t *testing.T) {
 func TestNullInt64(t *testing.T) {
 	tests := []extvals.NullInt64{
 		{},
-		{32, true},
-		{-32, true},
+		{V: 32, Valid: true},
+		{V: -32, Valid: true},
 	}
 
 	for _, item := range tests {
@@ -68,8 +68,8 @@ func TestNullInt64(t *testing.T) {
 func TestNullBool(t *testing.T) {
 	tests := []extvals.NullBool{
 		{},
-		{true, true},
-		{false, true},
+		{V: true, Valid: true},
+		{V: false, Valid: true},
 	}
 
 	for _, item := range tests {
@@ -95,7 +95,7 @@ func TestNullBool(t *testing.T) {
 func TestNullTime(t *testing.T) {
 	tests := []extvals.NullTime{
 		{},
-		{time.Date(2019, 9, 28, 4, 5, 6, 0, time.UTC), true},
+		{V: time.Date(2019, 9, 28, 4, 5, 6, 0, time.UTC), Valid: true},
 	}
 
 	for _, item := range tests {

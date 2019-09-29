@@ -3,7 +3,6 @@ package decimal
 import (
 	"fmt"
 	"math"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -109,16 +108,6 @@ func (d Decimal) String() string {
 // GoString implement fmt.GoStringer interface. Adding 'm' suffix to result of String().
 func (d Decimal) GoString() string {
 	return d.String() + "m"
-}
-
-var rightDotZero *regexp.Regexp
-
-func init() {
-	var err error
-	rightDotZero, err = regexp.Compile(`\.0*$`)
-	if err != nil {
-		panic(err)
-	}
 }
 
 // ShortString convert current value to string, removing ending 0s.
@@ -378,7 +367,7 @@ func FromDecimal128(low, high uint64) Decimal {
 	}
 
 	scale = -(scale - 6176)
-	if scale > 8 || scale < 0 {
+	if scale > 8 {
 		panic("FromDecimal128 scale out of range")
 	}
 	if low > uint64(maxVal) {

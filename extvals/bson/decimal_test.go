@@ -50,7 +50,7 @@ func TestNullDecimal(t *testing.T) {
 		back := v
 
 		if s != "nil" {
-			v.ID = decimal.NullDecimal{parseDecimal(s), true}
+			v.ID = decimal.NullDecimal{V: parseDecimal(s), Valid: true}
 		}
 		buf, err := bson.MarshalWithRegistry(mybson.Registry, &v)
 		assert.NoError(t, err)
@@ -88,7 +88,7 @@ func TestNullDecimalN(t *testing.T) {
 		back := v
 
 		if s != "nil" {
-			v.ID = decimal.NullDecimal2(decimal.NullDecimal{parseDecimal(s), true})
+			v.ID = decimal.NullDecimal2(decimal.NullDecimal{V: parseDecimal(s), Valid: true})
 		}
 		buf, err := bson.MarshalWithRegistry(mybson.Registry, v)
 		assert.NoError(t, err)
@@ -98,7 +98,7 @@ func TestNullDecimalN(t *testing.T) {
 			assert.Equal(t, decimal.NullDecimal2{}, back.ID)
 		} else {
 			assert.Equal(t,
-				decimal.NullDecimal2(decimal.NullDecimal{v.ID.V.Round(2), true}),
+				decimal.NullDecimal2(decimal.NullDecimal{V: v.ID.V.Round(2), Valid: true}),
 				back.ID)
 		}
 	}
