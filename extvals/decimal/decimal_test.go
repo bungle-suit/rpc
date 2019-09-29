@@ -202,7 +202,9 @@ type BinTestCaseWithOption struct {
 	c   int
 }
 
-func assertBinOpWithOption(t *testing.T, tests []BinTestCaseWithOption, op func(x, y decimal.Decimal, c int) decimal.Decimal) {
+func assertBinOpWithOption(t *testing.T,
+	tests []BinTestCaseWithOption,
+	op func(x, y decimal.Decimal, c int) decimal.Decimal) {
 	for _, rec := range tests {
 		a, err := decimal.FromString(rec.a)
 		assert.NoError(t, err)

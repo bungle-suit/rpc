@@ -201,10 +201,10 @@ func (d Decimal) Add(other Decimal) Decimal {
 	diff := int(d.scale) - int(other.scale)
 	switch {
 	case diff > 0:
-		vb = vb * powerOf10(diff)
+		vb *= powerOf10(diff)
 	case diff < 0:
 		scale = other.scale
-		va = va * powerOf10(-diff)
+		va *= powerOf10(-diff)
 	}
 	return Decimal{va + vb, scale}
 }

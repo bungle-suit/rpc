@@ -30,7 +30,7 @@ func (l UID) Low() int64 {
 
 // String implement fmt.Stringer interface
 func (l UID) String() string {
-	return strconv.FormatInt(int64(l.Low()), 10)
+	return strconv.FormatInt(l.Low(), 10)
 }
 
 // GoString implement fmt.GoStringer interface

@@ -18,7 +18,7 @@ const (
 	Object
 	List
 	Dict
-	RpcObject
+	RPCObject
 	// Map to ID type, id of referenced of entity object.
 	RefID
 	// Map to ID type, id of current entity object.

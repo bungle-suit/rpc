@@ -40,10 +40,10 @@ func (d *NullDecimal) UnmarshalJSON(buf []byte) error {
 	return nil
 }
 
-func (i NullDecimal) IsNull() bool {
-	return !i.Valid
+func (d NullDecimal) IsNull() bool {
+	return !d.Valid
 }
 
-func (i NullDecimal) Val() interface{} {
-	return i.V
+func (d NullDecimal) Val() interface{} {
+	return d.V
 }

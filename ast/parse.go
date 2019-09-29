@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	basicTypes map[string]NodeType = map[string]NodeType{
+	basicTypes = map[string]NodeType{
 		"void":     Void,
 		"int":      Int32,
 		"long":     Int64,
@@ -21,27 +21,14 @@ var (
 		"id":       ID,
 	}
 
-	notAllowNullTypes map[NodeType]bool = map[NodeType]bool{
+	notAllowNullTypes = map[NodeType]bool{
 		Void: true, String: true, Table: true, List: true, Dict: true,
 		RefID: true, ID: true,
 	}
 
-	decimalPattern   *regexp.Regexp
-	rpcObjectPattern *regexp.Regexp
+	decimalPattern   = regexp.MustCompile(`^decimal(\([0-8]\))$`)
+	rpcObjectPattern = regexp.MustCompile(`^(\w+\.)+\w+$`)
 )
-
-func init() {
-	var err error
-	decimalPattern, err = regexp.Compile(`^decimal(\([0-8]\))$`)
-	if err != nil {
-		panic(err)
-	}
-
-	rpcObjectPattern, err = regexp.Compile(`^(\w+\.)+\w+$`)
-	if err != nil {
-		panic(err)
-	}
-}
 
 // Parse rpc type string to Node.
 func Parse(ts string) (Node, error) {
@@ -64,30 +51,32 @@ func Parse(ts string) (Node, error) {
 	}
 
 	if strings.HasPrefix(absTS, "[") && strings.HasSuffix(absTS, "]") {
-		if itemNode, err := Parse(absTS[1 : len(absTS)-1]); err != nil {
+		itemNode, err := Parse(absTS[1 : len(absTS)-1])
+		if err != nil {
 			return nil, err
-		} else {
-			return checkNotAllowNull(ItemNode{
-				BasicNode{List, nullable, ts},
-				itemNode,
-			})
 		}
+
+		return checkNotAllowNull(ItemNode{
+			BasicNode{List, nullable, ts},
+			itemNode,
+		})
 	}
 
 	if strings.HasPrefix(absTS, "{str:") && strings.HasSuffix(absTS, "}") {
-		if itemNode, err := Parse(absTS[5 : len(absTS)-1]); err != nil {
+		itemNode, err := Parse(absTS[5 : len(absTS)-1])
+		if err != nil {
 			return nil, err
-		} else {
-			return checkNotAllowNull(ItemNode{
-				BasicNode{Dict, nullable, ts},
-				itemNode,
-			})
 		}
+
+		return checkNotAllowNull(ItemNode{
+			BasicNode{Dict, nullable, ts},
+			itemNode,
+		})
 	}
 
 	if rpcObjectPattern.MatchString(absTS) {
 		return checkNotAllowNull(BasicNode{
-			RpcObject, nullable, ts,
+			RPCObject, nullable, ts,
 		})
 	}
 	return nil, fmt.Errorf("[%s] Wrong type string: '%s'", tag, ts)

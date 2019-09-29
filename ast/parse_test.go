@@ -97,13 +97,13 @@ func TestRpcObject(t *testing.T) {
 	for _, ts := range tests {
 		n, err := ast.Parse(ts)
 		assert.NoError(t, err)
-		assert.Equal(t, ast.RpcObject, n.Type())
+		assert.Equal(t, ast.RPCObject, n.Type())
 		assert.False(t, n.Nullable())
 		assert.Equal(t, ts, n.String())
 
 		n, err = ast.Parse(ts + "?")
 		assert.NoError(t, err)
-		assert.Equal(t, ast.RpcObject, n.Type())
+		assert.Equal(t, ast.RPCObject, n.Type())
 		assert.True(t, n.Nullable())
 		assert.Equal(t, ts+"?", n.String())
 	}

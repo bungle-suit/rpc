@@ -32,13 +32,13 @@ func (c combinedCodec) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueRe
 	return c.decoder.DecodeValue(ctx, r, v)
 }
 
-func newNullableCodec(innerType reflect.Type) bsoncodec.ValueCodec {
-	decoder, err := registryNotNull.LookupDecoder(innerType)
+func newNullableCodec(notNullRegistry *bsoncodec.Registry, innerType reflect.Type) bsoncodec.ValueCodec {
+	decoder, err := notNullRegistry.LookupDecoder(innerType)
 	if err != nil {
 		panic(err)
 	}
 
-	encoder, err := registryNotNull.LookupEncoder(innerType)
+	encoder, err := notNullRegistry.LookupEncoder(innerType)
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +67,7 @@ func (nc nullableCodec) DecodeValue(ctx bsoncodec.DecodeContext, r bsonrw.ValueR
 func (nc nullableCodec) EncodeValue(ctx bsoncodec.EncodeContext, w bsonrw.ValueWriter, v reflect.Value) error {
 	n, ok := v.Interface().(extvals.Nullable)
 	if !ok {
-		return errors.New("Not Nullable")
+		return errors.New("not Nullable")
 	}
 
 	if n.IsNull() {

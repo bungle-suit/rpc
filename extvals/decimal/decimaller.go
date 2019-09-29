@@ -534,74 +534,74 @@ func (d NullDecimal8) String() string {
 	return NullDecimal(d).String()
 }
 
-func (i NullDecimal0) IsNull() bool {
-	return i.Valid
+func (d NullDecimal0) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal0) Val() interface{} {
-	return i.V
+func (d NullDecimal0) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal1) IsNull() bool {
-	return i.Valid
+func (d NullDecimal1) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal1) Val() interface{} {
-	return i.V
+func (d NullDecimal1) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal2) IsNull() bool {
-	return i.Valid
+func (d NullDecimal2) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal2) Val() interface{} {
-	return i.V
+func (d NullDecimal2) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal3) IsNull() bool {
-	return i.Valid
+func (d NullDecimal3) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal3) Val() interface{} {
-	return i.V
+func (d NullDecimal3) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal4) IsNull() bool {
-	return i.Valid
+func (d NullDecimal4) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal4) Val() interface{} {
-	return i.V
+func (d NullDecimal4) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal5) IsNull() bool {
-	return i.Valid
+func (d NullDecimal5) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal5) Val() interface{} {
-	return i.V
+func (d NullDecimal5) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal6) IsNull() bool {
-	return i.Valid
+func (d NullDecimal6) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal6) Val() interface{} {
-	return i.V
+func (d NullDecimal6) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal7) IsNull() bool {
-	return i.Valid
+func (d NullDecimal7) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal7) Val() interface{} {
-	return i.V
+func (d NullDecimal7) Val() interface{} {
+	return d.V
 }
 
-func (i NullDecimal8) IsNull() bool {
-	return i.Valid
+func (d NullDecimal8) IsNull() bool {
+	return d.Valid
 }
 
-func (i NullDecimal8) Val() interface{} {
-	return i.V
+func (d NullDecimal8) Val() interface{} {
+	return d.V
 }

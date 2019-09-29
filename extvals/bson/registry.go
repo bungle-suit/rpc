@@ -9,16 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/bsoncodec"
 )
 
-var (
-	// Registry is bson encoder/decoder for marshal value between mongo-db,
-	// contains standard types and my extsion types.
-	Registry *bsoncodec.Registry
-
-	// registry used to lookup non-nullable bson codecs
-	registryNotNull *bsoncodec.Registry
-)
-
-func init() {
+// Registry creates bsoncodec registry to support rpc extension types.
+func Registry() *bsoncodec.Registry {
 	builder := bsoncodec.NewRegistryBuilder()
 	bsoncodec.DefaultValueEncoders{}.RegisterDefaultEncoders(builder)
 	bsoncodec.DefaultValueDecoders{}.RegisterDefaultDecoders(builder)
@@ -41,10 +33,10 @@ func init() {
 		builder.RegisterCodec(t, decimalEncoderDecoderN{})
 	}
 
-	registryNotNull = builder.Build()
+	registryNotNull := builder.Build()
 
 	builder.RegisterCodec(
-		reflect.TypeOf(decimal.NullDecimal{}), newNullableCodec(reflect.TypeOf(decimal.Decimal{})))
+		reflect.TypeOf(decimal.NullDecimal{}), newNullableCodec(registryNotNull, reflect.TypeOf(decimal.Decimal{})))
 
 	types = []reflect.Type{
 		reflect.TypeOf(decimal.NullDecimal0{}),
@@ -62,13 +54,13 @@ func init() {
 	}
 
 	builder.RegisterCodec(
-		reflect.TypeOf(extvals.NullInt32{}), newNullableCodec(reflect.TypeOf(int32(0))))
+		reflect.TypeOf(extvals.NullInt32{}), newNullableCodec(registryNotNull, reflect.TypeOf(int32(0))))
 	builder.RegisterCodec(
-		reflect.TypeOf(extvals.NullInt64{}), newNullableCodec(reflect.TypeOf(int64(0))))
+		reflect.TypeOf(extvals.NullInt64{}), newNullableCodec(registryNotNull, reflect.TypeOf(int64(0))))
 	builder.RegisterCodec(
-		reflect.TypeOf(extvals.NullBool{}), newNullableCodec(reflect.TypeOf(true)))
+		reflect.TypeOf(extvals.NullBool{}), newNullableCodec(registryNotNull, reflect.TypeOf(true)))
 	builder.RegisterCodec(
-		reflect.TypeOf(extvals.NullTime{}), newNullableCodec(reflect.TypeOf(time.Time{})))
+		reflect.TypeOf(extvals.NullTime{}), newNullableCodec(registryNotNull, reflect.TypeOf(time.Time{})))
 
-	Registry = builder.Build()
+	return builder.Build()
 }
