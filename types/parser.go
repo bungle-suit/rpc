@@ -98,4 +98,6 @@ func (p *Parser) Define(ts string, ty Type) {
 //   'int', 'void', 'long', 'bool', 'str', 'double', 'datetime',
 //   'decimal', 'table', 'object'.
 func (p *Parser) DefinePrimitiveTypes() {
+	p.Define("int", directType{})
+	p.Define("long", directType{})
 }
