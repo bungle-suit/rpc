@@ -3,6 +3,7 @@ package types_test
 import (
 	"testing"
 
+	"github.com/bungle-suit/rpc/extvals/decimal"
 	"github.com/bungle-suit/rpc/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -60,6 +61,21 @@ func TestFloat(t *testing.T) {
 
 		var back float64
 		assert.NoError(t, types.Unmarshal(p, "double", buf, &back))
+		assert.Equal(t, v, back)
+	}
+}
+
+func TestDecimal(t *testing.T) {
+	p := types.NewParser()
+	p.DefinePrimitiveTypes()
+
+	for _, s := range []string{"0", "33", "-312.43", "9000000000000000", "-9000000000000000"} {
+		v := parseDecimal2(s)
+		buf, err := types.Marshal(p, "decimal(2)", v)
+		assert.NoError(t, err)
+
+		var back decimal.Decimal2
+		assert.NoError(t, types.Unmarshal(p, "decimal(2)", buf, &back))
 		assert.Equal(t, v, back)
 	}
 }

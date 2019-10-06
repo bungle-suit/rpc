@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/bungle-suit/rpc/extvals/decimal"
 	"github.com/bungle-suit/rpc/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -26,4 +27,13 @@ func assertUnmarshal(t *testing.T, ts, json string, exp interface{}) {
 
 	assert.NoError(t, types.Unmarshal(p, ts, []byte(json), back.Interface()))
 	assert.Equal(t, exp, back.Elem().Interface())
+}
+
+func parseDecimal2(s string) decimal.Decimal2 {
+	d, err := decimal.FromStringWithScale(s, 2)
+	if err != nil {
+		panic(err)
+	}
+
+	return decimal.Decimal2(d)
 }

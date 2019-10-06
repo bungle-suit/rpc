@@ -101,4 +101,14 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.Define("int", directType{})
 	p.Define("double", directType{})
 	p.Define("long", longType{})
+
+	p.Define("decimal(0)", decimalType(0))
+	p.Define("decimal(1)", decimalType(1))
+	p.Define("decimal(2)", decimalType(2))
+	p.Define("decimal(3)", decimalType(3))
+	p.Define("decimal(4)", decimalType(4))
+	p.Define("decimal(5)", decimalType(5))
+	p.Define("decimal(6)", decimalType(6))
+	p.Define("decimal(7)", decimalType(7))
+	p.Define("decimal(8)", decimalType(8))
 }
