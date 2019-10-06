@@ -10,6 +10,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func assertMarshalRoundTrip(t *testing.T, ts string, vals ...interface{}) {
+	p := types.NewParser()
+	p.DefinePrimitiveTypes()
+
+	for _, v := range vals {
+		buf, err := types.Marshal(p, ts, v)
+		assert.NoError(t, err)
+
+		back := reflect.New(reflect.TypeOf(v))
+		assert.NoError(t, types.Unmarshal(p, ts, buf, back.Interface()))
+		assert.Equal(t, v, back.Elem().Interface())
+	}
+}
+
 func assertMarshal(t *testing.T, ts string, v interface{}, exp string) {
 	p := types.NewParser()
 	p.DefinePrimitiveTypes()
