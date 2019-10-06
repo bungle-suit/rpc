@@ -5,11 +5,12 @@ import (
 	"reflect"
 
 	"github.com/bungle-suit/rpc/extvals/decimal"
+	"github.com/francoispqt/gojay"
 )
 
 type decimalType int
 
-func (d decimalType) Marshal(encoder *json.Encoder, v interface{}) error {
+func (d decimalType) Marshal(encoder *gojay.Encoder, v interface{}) error {
 	val := v.(decimal.Decimaller).Decimal().Round(int(d))
 	s := val.String()
 	return encoder.Encode(s)

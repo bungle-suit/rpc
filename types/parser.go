@@ -105,6 +105,7 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.Define("str", directType{})
 	p.Define("void", directType{})
 	p.Define("datetime", datetimeType{})
+	p.Define("table", tableType{})
 
 	p.Define("decimal(0)", decimalType(0))
 	p.Define("decimal(1)", decimalType(1))

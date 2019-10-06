@@ -3,11 +3,13 @@ package types
 import (
 	"encoding/json"
 	"reflect"
+
+	"github.com/francoispqt/gojay"
 )
 
 type boolType struct{}
 
-func (b boolType) Marshal(encoder *json.Encoder, v interface{}) error {
+func (b boolType) Marshal(encoder *gojay.Encoder, v interface{}) error {
 	val := v.(bool)
 	if val {
 		return encoder.Encode(1)

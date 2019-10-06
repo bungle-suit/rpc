@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"reflect"
 	"time"
+
+	"github.com/francoispqt/gojay"
 )
 
 type datetimeType struct{}
 
-func (datetimeType) Marshal(encoder *json.Encoder, v interface{}) error {
+func (datetimeType) Marshal(encoder *gojay.Encoder, v interface{}) error {
 	val := v.(time.Time)
 	secs := val.Unix()
 	return encoder.Encode(secs)

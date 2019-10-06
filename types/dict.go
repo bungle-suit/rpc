@@ -3,13 +3,15 @@ package types
 import (
 	"encoding/json"
 	"reflect"
+
+	"github.com/francoispqt/gojay"
 )
 
 type dictType struct {
 	inner Type
 }
 
-func (dictType) Marshal(encoder *json.Encoder, v interface{}) error {
+func (dictType) Marshal(encoder *gojay.Encoder, v interface{}) error {
 	panic("not implemented")
 }
 

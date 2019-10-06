@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+
+	"github.com/francoispqt/gojay"
 )
 
 type longType struct{}
@@ -14,7 +16,7 @@ const (
 	minSafeLong = int64(-9000000000000000)
 )
 
-func (longType) Marshal(encoder *json.Encoder, v interface{}) error {
+func (longType) Marshal(encoder *gojay.Encoder, v interface{}) error {
 	val := v.(int64)
 	if val > maxSafeLong || val < minSafeLong {
 		return encoder.Encode(strconv.FormatInt(val, 10))
