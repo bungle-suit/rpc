@@ -49,3 +49,17 @@ func TestLong(t *testing.T) {
 	assertUnmarshal(t, "long", `"9000000000000001"`, int64(9000000000000001))
 	assertUnmarshal(t, "long", `"-9000000000000001"`, int64(-9000000000000001))
 }
+
+func TestFloat(t *testing.T) {
+	p := types.NewParser()
+	p.DefinePrimitiveTypes()
+
+	for _, v := range []float64{0, 33, -312.4314, 9000000000000000, -9000000000000000} {
+		buf, err := types.Marshal(p, "double", v)
+		assert.NoError(t, err)
+
+		var back float64
+		assert.NoError(t, types.Unmarshal(p, "double", buf, &back))
+		assert.Equal(t, v, back)
+	}
+}
