@@ -1,7 +1,6 @@
 package table_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/bungle-suit/rpc/extvals/table"
@@ -10,7 +9,7 @@ import (
 
 type columnPair struct {
 	name string
-	typ  reflect.Type
+	ts   string
 }
 
 func validCols(t *testing.T, tbl *table.Table, expected ...columnPair) {
@@ -19,7 +18,7 @@ func validCols(t *testing.T, tbl *table.Table, expected ...columnPair) {
 	for i, exp := range expected {
 		col := tbl.Col(i)
 		assert.Equal(t, exp.name, col.Name())
-		assert.Equal(t, exp.typ, col.Type())
+		assert.Equal(t, exp.ts, col.TypeString())
 	}
 }
 
@@ -67,11 +66,11 @@ func TestNoColsTable(t *testing.T) {
 
 func TestTable(t *testing.T) {
 	tbl := table.New()
-	tbl.NewCol("a", reflect.TypeOf(int32(1)))
-	tbl.NewCol(`b`, reflect.TypeOf(int64(1)))
+	tbl.NewCol("a", "int")
+	tbl.NewCol(`b`, "long")
 
-	validCols(t, tbl, columnPair{`a`, reflect.TypeOf(int32(1))},
-		columnPair{`b`, reflect.TypeOf(int64(1))})
+	validCols(t, tbl, columnPair{`a`, "int"},
+		columnPair{`b`, "long"})
 
 	validNewRow(t, tbl, int32(1), int64(2))
 	validNewRow(t, tbl, int32(3), nil)

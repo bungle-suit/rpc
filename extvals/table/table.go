@@ -2,7 +2,6 @@ package table
 
 import (
 	"fmt"
-	"reflect"
 )
 
 // Table structure data made by rows and columns.
@@ -18,7 +17,7 @@ type Table struct {
 type Column struct {
 	data []interface{}
 	name string
-	typ  reflect.Type
+	ts   string
 }
 
 // Row to access data by row.
@@ -38,8 +37,8 @@ func (t *Table) NumCols() int {
 }
 
 // NewCol create column and add to table.
-func (t *Table) NewCol(name string, typ reflect.Type) *Column {
-	result := &Column{name: name, typ: typ, data: []interface{}{nil}}
+func (t *Table) NewCol(name string, ts string) *Column {
+	result := &Column{name: name, ts: ts, data: []interface{}{nil}}
 	t.cols = append(t.cols, result)
 	return result
 }
@@ -100,9 +99,9 @@ func (t *Table) Row(idx int) Row {
 	return Row{t.cols, idx + 1}
 }
 
-// Type of current column
-func (c *Column) Type() reflect.Type {
-	return c.typ
+// TypeString of current column
+func (c *Column) TypeString() string {
+	return c.ts
 }
 
 // Name of current column
