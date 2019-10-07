@@ -4,13 +4,14 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 type directType struct{}
 
-func (directType) Marshal(encoder *gojay.Encoder, v interface{}) error {
-	return encoder.Encode(v)
+func (directType) Marshal(w *myjson.Writer, v interface{}) error {
+	panic("not implemented")
+	// return encoder.Encode(v)
 }
 
 func (directType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

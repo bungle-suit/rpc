@@ -5,14 +5,14 @@ import (
 	"reflect"
 	"testing"
 
+	myjson "github.com/bungle-suit/json"
 	"github.com/bungle-suit/rpc/types"
-	"github.com/francoispqt/gojay"
 	"github.com/stretchr/testify/assert"
 )
 
 type fakeType string
 
-func (fakeType) Marshal(encoder *gojay.Encoder, v interface{}) error {
+func (fakeType) Marshal(w *myjson.Writer, v interface{}) error {
 	panic("not implemented")
 }
 

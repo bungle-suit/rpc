@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 type dictType struct {
 	inner Type
 }
 
-func (dictType) Marshal(encoder *gojay.Encoder, v interface{}) error {
+func (dictType) Marshal(w *myjson.Writer, v interface{}) error {
 	panic("not implemented")
 }
 

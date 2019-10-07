@@ -5,15 +5,16 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 type datetimeType struct{}
 
-func (datetimeType) Marshal(encoder *gojay.Encoder, v interface{}) error {
-	val := v.(time.Time)
-	secs := val.Unix()
-	return encoder.Encode(secs)
+func (datetimeType) Marshal(w *myjson.Writer, v interface{}) error {
+	panic("not implemented")
+	// val := v.(time.Time)
+	// secs := val.Unix()
+	// return encoder.Encode(secs)
 }
 
 func (datetimeType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

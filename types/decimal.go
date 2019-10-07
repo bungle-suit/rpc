@@ -4,16 +4,17 @@ import (
 	"encoding/json"
 	"reflect"
 
+	myjson "github.com/bungle-suit/json"
 	"github.com/bungle-suit/rpc/extvals/decimal"
-	"github.com/francoispqt/gojay"
 )
 
 type decimalType int
 
-func (d decimalType) Marshal(encoder *gojay.Encoder, v interface{}) error {
-	val := v.(decimal.Decimaller).Decimal().Round(int(d))
-	s := val.String()
-	return encoder.Encode(s)
+func (d decimalType) Marshal(w *myjson.Writer, v interface{}) error {
+	panic("not implemented")
+	// val := v.(decimal.Decimaller).Decimal().Round(int(d))
+	// s := val.String()
+	// return encoder.Encode(s)
 }
 
 func (d decimalType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

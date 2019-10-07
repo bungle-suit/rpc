@@ -103,7 +103,7 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.Define("long", longType{})
 	p.Define("bool", boolType{})
 	p.Define("str", directType{})
-	p.Define("void", directType{})
+	p.Define("void", voidType{})
 	p.Define("datetime", datetimeType{})
 	p.Define("table", tableType{})
 

@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 type longType struct{}
@@ -16,12 +16,13 @@ const (
 	minSafeLong = int64(-9000000000000000)
 )
 
-func (longType) Marshal(encoder *gojay.Encoder, v interface{}) error {
-	val := v.(int64)
-	if val > maxSafeLong || val < minSafeLong {
-		return encoder.Encode(strconv.FormatInt(val, 10))
-	}
-	return encoder.Encode(v)
+func (longType) Marshal(w *myjson.Writer, v interface{}) error {
+	panic("not implemented")
+	// val := v.(int64)
+	// if val > maxSafeLong || val < minSafeLong {
+	// 	return encoder.Encode(strconv.FormatInt(val, 10))
+	// }
+	// return encoder.Encode(v)
 }
 
 func (longType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

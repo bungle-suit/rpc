@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 // Marshal value to json
@@ -16,8 +16,8 @@ func Marshal(p *Parser, ts string, v interface{}) ([]byte, error) {
 	}
 
 	buf := bytes.Buffer{}
-	encoder := gojay.NewEncoder(&buf)
-	err = t.Marshal(encoder, v)
+	w := myjson.NewWriter(&buf)
+	err = t.Marshal(w, v)
 	return buf.Bytes(), err
 }
 

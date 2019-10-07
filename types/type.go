@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 type Marshaler interface {
-	Marshal(encoder *gojay.Encoder, v interface{}) error
+	Marshal(w *myjson.Writer, v interface{}) error
 }
 
 type Unmarshaler interface {
@@ -22,12 +22,12 @@ type Type interface {
 }
 
 type combinedType struct {
-	marshal   func(encoder *gojay.Encoder, v interface{}) error
+	marshal   func(w *myjson.Writer, v interface{}) error
 	unmarshal func(decoder *json.Decoder, v reflect.Value) error
 }
 
-func (c combinedType) Marshal(encoder *gojay.Encoder, v interface{}) error {
-	return c.marshal(encoder, v)
+func (c combinedType) Marshal(w *myjson.Writer, v interface{}) error {
+	return c.marshal(w, v)
 }
 
 func (c combinedType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

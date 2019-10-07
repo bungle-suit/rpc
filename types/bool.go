@@ -4,18 +4,19 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 type boolType struct{}
 
-func (b boolType) Marshal(encoder *gojay.Encoder, v interface{}) error {
-	val := v.(bool)
-	if val {
-		return encoder.Encode(1)
-	} else {
-		return encoder.Encode(0)
-	}
+func (b boolType) Marshal(w *myjson.Writer, v interface{}) error {
+	panic("not implemented")
+	// val := v.(bool)
+	// if val {
+	// 	return encoder.Encode(1)
+	// } else {
+	// 	return encoder.Encode(0)
+	// }
 }
 
 func (b boolType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"reflect"
 
-	"github.com/francoispqt/gojay"
+	myjson "github.com/bungle-suit/json"
 )
 
 type nullType struct {
 	inner Type
 }
 
-func (nullType) Marshal(encoder *gojay.Encoder, v interface{}) error {
+func (nullType) Marshal(w *myjson.Writer, v interface{}) error {
 	panic("not implemented")
 }
 
