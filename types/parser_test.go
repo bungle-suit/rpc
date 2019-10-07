@@ -1,22 +1,21 @@
 package types_test
 
 import (
-	"encoding/json"
 	"reflect"
 	"testing"
 
-	myjson "github.com/bungle-suit/json"
+	"github.com/bungle-suit/json"
 	"github.com/bungle-suit/rpc/types"
 	"github.com/stretchr/testify/assert"
 )
 
 type fakeType string
 
-func (fakeType) Marshal(w *myjson.Writer, v interface{}) {
+func (fakeType) Marshal(w *json.Writer, v interface{}) {
 	panic("not implemented")
 }
 
-func (fakeType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
+func (fakeType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	panic("not implemented")
 }
 

@@ -1,15 +1,14 @@
 package types
 
 import (
-	"encoding/json"
 	"reflect"
 
-	myjson "github.com/bungle-suit/json"
+	"github.com/bungle-suit/json"
 )
 
 type boolType struct{}
 
-func (b boolType) Marshal(w *myjson.Writer, v interface{}) {
+func (b boolType) Marshal(w *json.Writer, v interface{}) {
 	val := v.(bool)
 	if val {
 		w.WriteNumber(1)
@@ -18,13 +17,13 @@ func (b boolType) Marshal(w *myjson.Writer, v interface{}) {
 	}
 }
 
-func (b boolType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
-	var i int
-	if err := decoder.Decode(&i); err != nil {
+func (b boolType) Unmarshal(r *json.Reader, v reflect.Value) error {
+	fv, err := r.ReadNumber()
+	if err != nil {
 		return err
 	}
 
-	bv := i != 0
+	bv := fv != 0
 	v.Elem().SetBool(bv)
 	return nil
 }

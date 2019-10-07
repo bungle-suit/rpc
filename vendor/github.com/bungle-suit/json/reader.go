@@ -92,6 +92,13 @@ const (
 	EOF
 )
 
+// NewReader create a json reader from buf
+func NewReader(json []byte) *Reader {
+	r := &Reader{}
+	r.Init(json)
+	return r
+}
+
 // Init Reader struct
 func (r *Reader) Init(json []byte) {
 	r.Buf = json
@@ -171,7 +178,6 @@ func (r *Reader) arrayState(tt TokenType) (TokenType, error) {
 			return ttInvalid, errInvalidJSONFormat()
 		}
 		r.changeCurrent(statusArrayValue)
-		break
 	case BEGIN_ARRAY:
 		r.changeCurrent(statusArrayValue)
 		r.push(statusBeginArray)
@@ -268,6 +274,26 @@ func (r *Reader) ExpectName(name string) error {
 		return nil
 	}
 	return GenericFormatError()
+}
+
+// ReadNumber return next float value, return non-nil error
+// if next token not number.
+func (r *Reader) ReadNumber() (float64, error) {
+	if err := r.Expect(NUMBER); err != nil {
+		return 0, err
+	}
+
+	return strconv.ParseFloat(string(r.Buf[r.Start:r.End]), 64)
+}
+
+// ReadString return next string value, return non-nil error
+// if next token not string.
+func (r *Reader) ReadString() (string, error) {
+	if err := r.Expect(STRING); err != nil {
+		return "", err
+	}
+
+	return string(r.Str), nil
 }
 
 func (r *Reader) doNext() (tt TokenType, err error) {
@@ -484,7 +510,7 @@ func appendRune(buf []byte, r rune) []byte {
 		b = make([]byte, len(buf)+l, (len(buf)+l)*2)
 		copy(b, buf)
 	} else {
-		b = buf[:]
+		b = buf
 	}
 	utf8.EncodeRune(b[len(buf):len(buf)+l], r)
 	return b[0 : len(buf)+l]

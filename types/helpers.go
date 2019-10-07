@@ -2,10 +2,9 @@ package types
 
 import (
 	"bytes"
-	"encoding/json"
 	"reflect"
 
-	myjson "github.com/bungle-suit/json"
+	"github.com/bungle-suit/json"
 )
 
 // Marshal value to json
@@ -16,7 +15,7 @@ func Marshal(p *Parser, ts string, v interface{}) ([]byte, error) {
 	}
 
 	buf := bytes.Buffer{}
-	w := myjson.NewWriter(&buf)
+	w := json.NewWriter(&buf)
 	t.Marshal(w, v)
 	err = w.Flush()
 	return buf.Bytes(), err
@@ -29,7 +28,6 @@ func Unmarshal(p *Parser, ts string, data []byte, v interface{}) error {
 		return err
 	}
 
-	buf := bytes.NewReader(data)
-	decoder := json.NewDecoder(buf)
-	return t.Unmarshal(decoder, reflect.ValueOf(v))
+	r := json.NewReader(data)
+	return t.Unmarshal(r, reflect.ValueOf(v))
 }

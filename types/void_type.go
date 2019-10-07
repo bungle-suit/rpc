@@ -1,18 +1,17 @@
 package types
 
 import (
-	"encoding/json"
 	"reflect"
 
-	myjson "github.com/bungle-suit/json"
+	"github.com/bungle-suit/json"
 )
 
 type voidType struct{}
 
-func (voidType) Marshal(w *myjson.Writer, v interface{}) {
+func (voidType) Marshal(w *json.Writer, v interface{}) {
 	w.WriteNull()
 }
 
-func (voidType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
-	panic("not implemented")
+func (voidType) Unmarshal(r *json.Reader, v reflect.Value) error {
+	return r.Expect(json.NULL)
 }

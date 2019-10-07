@@ -1,23 +1,22 @@
 package types
 
 import (
-	"encoding/json"
 	"reflect"
 
-	myjson "github.com/bungle-suit/json"
+	"github.com/bungle-suit/json"
 	"github.com/bungle-suit/rpc/extvals/decimal"
 )
 
 type decimalType int
 
-func (d decimalType) Marshal(w *myjson.Writer, v interface{}) {
+func (d decimalType) Marshal(w *json.Writer, v interface{}) {
 	val := v.(decimal.Decimaller).Decimal().Round(int(d))
 	w.WriteString(val.String())
 }
 
-func (d decimalType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
-	var s string
-	if err := decoder.Decode(&s); err != nil {
+func (d decimalType) Unmarshal(r *json.Reader, v reflect.Value) error {
+	s, err := r.ReadString()
+	if err != nil {
 		return err
 	}
 
