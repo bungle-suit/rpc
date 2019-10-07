@@ -10,7 +10,7 @@ type listType struct {
 	inner Type
 }
 
-func (listType) Marshal(w *json.Writer, v interface{}) {
+func (listType) Marshal(w *json.Writer, v interface{}) error {
 	panic("not implemented")
 }
 

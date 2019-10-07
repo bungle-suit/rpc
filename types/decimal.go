@@ -9,9 +9,10 @@ import (
 
 type decimalType int
 
-func (d decimalType) Marshal(w *json.Writer, v interface{}) {
+func (d decimalType) Marshal(w *json.Writer, v interface{}) error {
 	val := v.(decimal.Decimaller).Decimal().Round(int(d))
 	w.WriteString(val.String())
+	return nil
 }
 
 func (d decimalType) Unmarshal(r *json.Reader, v reflect.Value) error {

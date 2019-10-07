@@ -8,8 +8,9 @@ import (
 
 type voidType struct{}
 
-func (voidType) Marshal(w *json.Writer, v interface{}) {
+func (voidType) Marshal(w *json.Writer, v interface{}) error {
 	w.WriteNull()
+	return nil
 }
 
 func (voidType) Unmarshal(r *json.Reader, v reflect.Value) error {

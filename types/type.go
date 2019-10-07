@@ -7,7 +7,7 @@ import (
 )
 
 type Marshaler interface {
-	Marshal(w *json.Writer, v interface{})
+	Marshal(w *json.Writer, v interface{}) error
 }
 
 type Unmarshaler interface {

@@ -9,10 +9,11 @@ import (
 
 type datetimeType struct{}
 
-func (datetimeType) Marshal(w *json.Writer, v interface{}) {
+func (datetimeType) Marshal(w *json.Writer, v interface{}) error {
 	val := v.(time.Time)
 	secs := val.Unix()
 	w.WriteNumber(float64(secs))
+	return nil
 }
 
 func (datetimeType) Unmarshal(r *json.Reader, v reflect.Value) error {

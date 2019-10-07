@@ -10,9 +10,10 @@ import (
 
 type intType struct{}
 
-func (intType) Marshal(w *json.Writer, v interface{}) {
+func (intType) Marshal(w *json.Writer, v interface{}) error {
 	val := v.(int32)
 	w.WriteNumber(float64(val))
+	return nil
 }
 
 func (intType) Unmarshal(r *json.Reader, v reflect.Value) error {
@@ -33,13 +34,14 @@ const (
 	minSafeLong = int64(-9000000000000000)
 )
 
-func (longType) Marshal(w *json.Writer, v interface{}) {
+func (longType) Marshal(w *json.Writer, v interface{}) error {
 	val := v.(int64)
 	if val > maxSafeLong || val < minSafeLong {
 		w.WriteString(strconv.FormatInt(val, 10))
 	} else {
 		w.WriteNumber(float64(val))
 	}
+	return nil
 }
 
 func (longType) Unmarshal(r *json.Reader, v reflect.Value) error {
@@ -67,9 +69,10 @@ func (longType) Unmarshal(r *json.Reader, v reflect.Value) error {
 
 type floatType struct{}
 
-func (floatType) Marshal(w *json.Writer, v interface{}) {
+func (floatType) Marshal(w *json.Writer, v interface{}) error {
 	val := v.(float64)
 	w.WriteNumber(val)
+	return nil
 }
 
 func (floatType) Unmarshal(r *json.Reader, v reflect.Value) error {
