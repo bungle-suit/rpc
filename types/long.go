@@ -9,6 +9,17 @@ import (
 	myjson "github.com/bungle-suit/json"
 )
 
+type intType struct{}
+
+func (intType) Marshal(w *myjson.Writer, v interface{}) {
+	val := v.(int32)
+	w.WriteNumber(float64(val))
+}
+
+func (intType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
+	return decoder.Decode(v.Interface())
+}
+
 type longType struct{}
 
 const (
@@ -16,13 +27,13 @@ const (
 	minSafeLong = int64(-9000000000000000)
 )
 
-func (longType) Marshal(w *myjson.Writer, v interface{}) error {
-	panic("not implemented")
-	// val := v.(int64)
-	// if val > maxSafeLong || val < minSafeLong {
-	// 	return encoder.Encode(strconv.FormatInt(val, 10))
-	// }
-	// return encoder.Encode(v)
+func (longType) Marshal(w *myjson.Writer, v interface{}) {
+	val := v.(int64)
+	if val > maxSafeLong || val < minSafeLong {
+		w.WriteNumber(float64(val))
+	} else {
+		w.WriteString(strconv.FormatInt(val, 10))
+	}
 }
 
 func (longType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
@@ -46,4 +57,15 @@ func (longType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
 		return fmt.Errorf("[%s] Failed unmarshal '%v' to long", tag, tok)
 	}
 	return nil
+}
+
+type floatType struct{}
+
+func (floatType) Marshal(w *myjson.Writer, v interface{}) {
+	val := v.(float64)
+	w.WriteNumber(val)
+}
+
+func (floatType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {
+	return decoder.Decode(v.Interface())
 }

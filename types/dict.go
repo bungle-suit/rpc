@@ -11,7 +11,7 @@ type dictType struct {
 	inner Type
 }
 
-func (dictType) Marshal(w *myjson.Writer, v interface{}) error {
+func (dictType) Marshal(w *myjson.Writer, v interface{}) {
 	panic("not implemented")
 }
 

@@ -11,7 +11,7 @@ type listType struct {
 	inner Type
 }
 
-func (listType) Marshal(w *myjson.Writer, v interface{}) error {
+func (listType) Marshal(w *myjson.Writer, v interface{}) {
 	panic("not implemented")
 }
 

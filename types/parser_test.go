@@ -12,7 +12,7 @@ import (
 
 type fakeType string
 
-func (fakeType) Marshal(w *myjson.Writer, v interface{}) error {
+func (fakeType) Marshal(w *myjson.Writer, v interface{}) {
 	panic("not implemented")
 }
 

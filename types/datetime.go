@@ -10,11 +10,10 @@ import (
 
 type datetimeType struct{}
 
-func (datetimeType) Marshal(w *myjson.Writer, v interface{}) error {
-	panic("not implemented")
-	// val := v.(time.Time)
-	// secs := val.Unix()
-	// return encoder.Encode(secs)
+func (datetimeType) Marshal(w *myjson.Writer, v interface{}) {
+	val := v.(time.Time)
+	secs := val.Unix()
+	w.WriteNumber(float64(secs))
 }
 
 func (datetimeType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

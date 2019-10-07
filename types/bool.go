@@ -9,14 +9,13 @@ import (
 
 type boolType struct{}
 
-func (b boolType) Marshal(w *myjson.Writer, v interface{}) error {
-	panic("not implemented")
-	// val := v.(bool)
-	// if val {
-	// 	return encoder.Encode(1)
-	// } else {
-	// 	return encoder.Encode(0)
-	// }
+func (b boolType) Marshal(w *myjson.Writer, v interface{}) {
+	val := v.(bool)
+	if val {
+		w.WriteNumber(1)
+	} else {
+		w.WriteNumber(0)
+	}
 }
 
 func (b boolType) Unmarshal(decoder *json.Decoder, v reflect.Value) error {

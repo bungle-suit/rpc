@@ -11,7 +11,7 @@ type nullType struct {
 	inner Type
 }
 
-func (nullType) Marshal(w *myjson.Writer, v interface{}) error {
+func (nullType) Marshal(w *myjson.Writer, v interface{}) {
 	panic("not implemented")
 }
 

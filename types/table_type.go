@@ -9,7 +9,7 @@ import (
 
 type tableType struct{}
 
-func (t tableType) Marshal(w *myjson.Writer, v interface{}) error {
+func (t tableType) Marshal(w *myjson.Writer, v interface{}) {
 	panic("not implemented")
 }
 

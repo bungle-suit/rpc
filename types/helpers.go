@@ -17,7 +17,8 @@ func Marshal(p *Parser, ts string, v interface{}) ([]byte, error) {
 
 	buf := bytes.Buffer{}
 	w := myjson.NewWriter(&buf)
-	err = t.Marshal(w, v)
+	t.Marshal(w, v)
+	err = w.Flush()
 	return buf.Bytes(), err
 }
 
