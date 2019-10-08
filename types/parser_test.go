@@ -11,7 +11,7 @@ import (
 
 type fakeType string
 
-func (fakeType) Marshal(w *json.Writer, v interface{}) {
+func (fakeType) Marshal(w *json.Writer, v interface{}) error {
 	panic("not implemented")
 }
 

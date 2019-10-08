@@ -2,7 +2,6 @@ package types_test
 
 import (
 	"reflect"
-	"strings"
 	"testing"
 
 	"github.com/bungle-suit/rpc/extvals/decimal"
@@ -30,7 +29,7 @@ func assertMarshal(t *testing.T, ts string, v interface{}, exp string) {
 
 	buf, err := types.Marshal(p, ts, v)
 	assert.NoError(t, err)
-	assert.Equal(t, exp, strings.TrimSpace(string(buf)))
+	assert.JSONEq(t, exp, string(buf))
 }
 
 func assertUnmarshal(t *testing.T, ts, json string, exp interface{}) {

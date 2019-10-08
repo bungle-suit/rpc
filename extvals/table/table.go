@@ -37,6 +37,11 @@ func (t *Table) NumCols() int {
 }
 
 // NewCol create column and add to table.
+//
+// ts is type string of rpc type system, nullable type or non-nullable
+// types are both okay, table rpc type marshaller handles nil/null value,
+// marshal nil cell values to json null, use non-nullable has a little better
+// performance.
 func (t *Table) NewCol(name string, ts string) *Column {
 	result := &Column{name: name, ts: ts, data: []interface{}{nil}}
 	t.cols = append(t.cols, result)
