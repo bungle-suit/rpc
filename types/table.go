@@ -74,7 +74,7 @@ func (tableType) writeRow(w *json.Writer, row table.Row, colTypes []Type) error 
 }
 
 func (t tableType) Unmarshal(r *json.Reader) (interface{}, error) {
-	if err := r.Expect(json.BEGIN_OBJECT); err != nil {
+	if err := r.Expect(json.BeginObject); err != nil {
 		return nil, err
 	}
 
@@ -85,10 +85,10 @@ func (t tableType) Unmarshal(r *json.Reader) (interface{}, error) {
 	}
 
 	switch tt {
-	case json.END_OBJECT:
+	case json.EndObject:
 		return result, nil
 
-	case json.PROPERTY_NAME:
+	case json.PropertyName:
 		if err := t.parseMeta(r, result); err != nil {
 			return nil, err
 		}
@@ -107,7 +107,7 @@ func (t tableType) parseMeta(r *json.Reader, table *table.Table) error {
 		return fmt.Errorf("[%s] 'cols' should be table type first property", tag)
 	}
 
-	if err := r.Expect(json.BEGIN_ARRAY); err != nil {
+	if err := r.Expect(json.BeginArray); err != nil {
 		return err
 	}
 
@@ -118,10 +118,10 @@ func (t tableType) parseMeta(r *json.Reader, table *table.Table) error {
 		}
 
 		switch tt {
-		case json.END_ARRAY:
+		case json.EndArray:
 			return nil
 
-		case json.BEGIN_OBJECT:
+		case json.BeginObject:
 			if err := t.parseColumn(r, table); err != nil {
 				return err
 			}
@@ -142,7 +142,7 @@ func (t tableType) parseColumn(r *json.Reader, table *table.Table) error {
 		}
 
 		switch tt {
-		case json.PROPERTY_NAME:
+		case json.PropertyName:
 			switch string(r.Str) {
 			case "name":
 				var err error
@@ -158,7 +158,7 @@ func (t tableType) parseColumn(r *json.Reader, table *table.Table) error {
 				return fmt.Errorf("[%s] unexpected table column field: %s", tag, string(r.Str))
 			}
 
-		case json.END_OBJECT:
+		case json.EndObject:
 			if name == "" {
 				return fmt.Errorf("[%s] `table` meta requires `name` field", tag)
 			}
@@ -187,17 +187,17 @@ func (t tableType) afterMeta(r *json.Reader, table *table.Table) error {
 		}
 
 		switch tt {
-		case json.END_OBJECT:
+		case json.EndObject:
 			return nil
 
-		case json.PROPERTY_NAME:
+		case json.PropertyName:
 			switch string(r.Str) {
 			case "rows":
 				if err := t.parseRows(r, table, colTypes); err != nil {
 					return err
 				}
 			case "sumrow":
-				if err := r.Expect(json.BEGIN_ARRAY); err != nil {
+				if err := r.Expect(json.BeginArray); err != nil {
 					return err
 				}
 				if err := t.parseRow(r, table.EnsureSumRow(), colTypes); err != nil {
@@ -228,7 +228,7 @@ func (t tableType) toColumnTypes(tbl *table.Table) ([]Type, error) {
 }
 
 func (t tableType) parseRows(r *json.Reader, table *table.Table, colTypes []Type) error {
-	if err := r.Expect(json.BEGIN_ARRAY); err != nil {
+	if err := r.Expect(json.BeginArray); err != nil {
 		return err
 	}
 
@@ -238,12 +238,12 @@ func (t tableType) parseRows(r *json.Reader, table *table.Table, colTypes []Type
 			return err
 		}
 		switch tt {
-		case json.BEGIN_ARRAY:
+		case json.BeginArray:
 			row := table.NewRow()
 			if err := t.parseRow(r, row, colTypes); err != nil {
 				return err
 			}
-		case json.END_ARRAY:
+		case json.EndArray:
 			return nil
 		default:
 			return fmt.Errorf("[%s] should not happen 4", tag)
@@ -257,7 +257,7 @@ func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type) erro
 		if err != nil {
 			return err
 		}
-		if tt == json.NULL {
+		if tt == json.Null {
 			continue
 		} else {
 			r.Undo()
@@ -269,5 +269,5 @@ func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type) erro
 		}
 		row.SetCell(idx, cellVal)
 	}
-	return r.Expect(json.END_ARRAY)
+	return r.Expect(json.EndArray)
 }

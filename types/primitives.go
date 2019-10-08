@@ -69,9 +69,9 @@ func (longType) Unmarshal(r *json.Reader) (interface{}, error) {
 
 	var s string
 	switch tt {
-	case json.NUMBER:
+	case json.Number:
 		s = string(r.Buf[r.Start:r.End])
-	case json.STRING:
+	case json.String:
 		s = string(r.Buf[r.Start+1 : r.End-1])
 	default:
 		return nil, fmt.Errorf("[%s] Unexpected long type", tag)
@@ -133,7 +133,7 @@ func (voidType) Marshal(w *json.Writer, v interface{}) error {
 }
 
 func (voidType) Unmarshal(r *json.Reader) (interface{}, error) {
-	return nil, r.Expect(json.NULL)
+	return nil, r.Expect(json.Null)
 }
 
 type decimalType int
