@@ -6,8 +6,7 @@ import (
 	"github.com/bungle-suit/rpc/extvals/table"
 )
 
-// TODO: continue after add Type.New()
-func _TestTable(t *testing.T) {
+func TestTable(t *testing.T) {
 	tbl := table.New()
 	assertMarshal(t, "table", tbl, "{}")
 	assertUnmarshal(t, "table", "{}", tbl)

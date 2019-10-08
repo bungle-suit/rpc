@@ -266,8 +266,8 @@ func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type, isSu
 			}
 		}
 
-		var cellVal interface{}
-		if err := col.Unmarshal(r, reflect.ValueOf(&cellVal)); err != nil {
+		cellVal := col.New()
+		if err := col.Unmarshal(r, reflect.ValueOf(cellVal).Addr()); err != nil {
 			return err
 		} else {
 			row.SetCell(idx, cellVal)
