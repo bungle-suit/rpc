@@ -26,7 +26,3 @@ func (datetimeType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	v.Elem().Set(reflect.ValueOf(t))
 	return nil
 }
-
-func (datetimeType) New() interface{} {
-	return time.Time{}
-}

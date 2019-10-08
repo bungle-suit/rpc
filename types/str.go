@@ -18,7 +18,3 @@ func (stringType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	v.Elem().SetString(s)
 	return err
 }
-
-func (stringType) New() interface{} {
-	return ""
-}
