@@ -16,3 +16,7 @@ func (voidType) Marshal(w *json.Writer, v interface{}) error {
 func (voidType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	return r.Expect(json.NULL)
 }
+
+func (voidType) New() interface{} {
+	return nil
+}

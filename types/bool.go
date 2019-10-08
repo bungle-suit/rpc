@@ -8,7 +8,7 @@ import (
 
 type boolType struct{}
 
-func (b boolType) Marshal(w *json.Writer, v interface{}) error {
+func (boolType) Marshal(w *json.Writer, v interface{}) error {
 	val := v.(bool)
 	if val {
 		w.WriteNumber(1)
@@ -18,7 +18,7 @@ func (b boolType) Marshal(w *json.Writer, v interface{}) error {
 	return nil
 }
 
-func (b boolType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (boolType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	fv, err := r.ReadNumber()
 	if err != nil {
 		return err
@@ -27,4 +27,8 @@ func (b boolType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	bv := fv != 0
 	v.Elem().SetBool(bv)
 	return nil
+}
+
+func (boolType) New() interface{} {
+	return false
 }

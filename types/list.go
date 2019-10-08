@@ -17,3 +17,7 @@ func (listType) Marshal(w *json.Writer, v interface{}) error {
 func (listType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	panic("not implemented")
 }
+
+func (listType) New() interface{} {
+	panic("not implemented")
+}

@@ -19,6 +19,10 @@ func (fakeType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	panic("not implemented")
 }
 
+func (fakeType) New() interface{} {
+	panic("not implemented")
+}
+
 func TestParseKnownTypes(t *testing.T) {
 	p := types.NewParser()
 	p.Define("t1", fakeType("ty1"))

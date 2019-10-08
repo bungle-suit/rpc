@@ -13,6 +13,10 @@ type tableType struct {
 	*Parser
 }
 
+func (tableType) New() interface{} {
+	return table.New()
+}
+
 func (tt tableType) Marshal(w *json.Writer, v interface{}) error {
 	t := v.(*table.Table)
 	colTypes := make([]Type, t.NumCols())

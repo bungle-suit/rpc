@@ -27,6 +27,10 @@ func (intType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	return nil
 }
 
+func (intType) New() interface{} {
+	return int32(0)
+}
+
 type longType struct{}
 
 const (
@@ -67,6 +71,10 @@ func (longType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	return nil
 }
 
+func (longType) New() interface{} {
+	return int64(0)
+}
+
 type floatType struct{}
 
 func (floatType) Marshal(w *json.Writer, v interface{}) error {
@@ -83,4 +91,8 @@ func (floatType) Unmarshal(r *json.Reader, v reflect.Value) error {
 
 	v.Elem().SetFloat(fv)
 	return nil
+}
+
+func (floatType) New() interface{} {
+	return float64(0)
 }
