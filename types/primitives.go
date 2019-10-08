@@ -68,11 +68,12 @@ func (longType) Unmarshal(r *json.Reader) (interface{}, error) {
 	}
 
 	var s string
-	if tt == json.NUMBER {
+	switch tt {
+	case json.NUMBER:
 		s = string(r.Buf[r.Start:r.End])
-	} else if tt == json.STRING {
+	case json.STRING:
 		s = string(r.Buf[r.Start+1 : r.End-1])
-	} else {
+	default:
 		return nil, fmt.Errorf("[%s] Unexpected long type", tag)
 	}
 

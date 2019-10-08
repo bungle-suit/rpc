@@ -12,21 +12,21 @@ type tableType struct {
 	*Parser
 }
 
-func (tt tableType) Marshal(w *json.Writer, v interface{}) error {
-	t := v.(*table.Table)
-	colTypes := make([]Type, t.NumCols())
-	cols := make([]*table.Column, t.NumCols())
-	for i, l := 0, t.NumCols(); i < l; i++ {
-		c := t.Col(i)
+func (t tableType) Marshal(w *json.Writer, v interface{}) error {
+	tbl := v.(*table.Table)
+	colTypes := make([]Type, tbl.NumCols())
+	cols := make([]*table.Column, tbl.NumCols())
+	for i, l := 0, tbl.NumCols(); i < l; i++ {
+		c := tbl.Col(i)
 		cols[i] = c
 		var err error
-		if colTypes[i], err = tt.Parse(c.TypeString()); err != nil {
+		if colTypes[i], err = t.Parse(c.TypeString()); err != nil {
 			return err
 		}
 	}
 
 	w.BeginObject()
-	if t.NumCols() != 0 {
+	if tbl.NumCols() != 0 {
 		w.WriteName("cols")
 		w.BeginArray()
 		for _, m := range cols {
@@ -39,34 +39,34 @@ func (tt tableType) Marshal(w *json.Writer, v interface{}) error {
 		}
 		w.EndArray()
 	}
-	if t.NumRows() != 0 {
+	if tbl.NumRows() != 0 {
 		w.WriteName("rows")
 		w.BeginArray()
-		for idx := 0; idx < t.NumRows(); idx++ {
-			if err := tt.writeRow(w, t.Row(idx), colTypes, false); err != nil {
+		for idx := 0; idx < tbl.NumRows(); idx++ {
+			if err := t.writeRow(w, tbl.Row(idx), colTypes); err != nil {
 				return err
 			}
 		}
 		w.EndArray()
 	}
-	if t.HasSumRow() {
+	if tbl.HasSumRow() {
 		w.WriteName("sumrow")
-		tt.writeRow(w, t.SumRow(), colTypes, true)
+		if err := t.writeRow(w, tbl.SumRow(), colTypes); err != nil {
+			return err
+		}
 	}
 	w.EndObject()
 	return nil
 }
 
-func (tt tableType) writeRow(w *json.Writer, row table.Row, colTypes []Type, isSumRow bool) error {
+func (tableType) writeRow(w *json.Writer, row table.Row, colTypes []Type) error {
 	w.BeginArray()
 	for i, ct := range colTypes {
 		v := row.Cell(i)
 		if v == nil {
 			w.WriteNull()
-		} else {
-			if err := ct.Marshal(w, row.Cell(i)); err != nil {
-				return err
-			}
+		} else if err := ct.Marshal(w, row.Cell(i)); err != nil {
+			return err
 		}
 	}
 	w.EndArray()
@@ -189,21 +189,24 @@ func (t tableType) afterMeta(r *json.Reader, table *table.Table) error {
 		switch tt {
 		case json.END_OBJECT:
 			return nil
+
 		case json.PROPERTY_NAME:
-			if bytes.Equal(r.Str, []byte("rows")) {
+			switch string(r.Str) {
+			case "rows":
 				if err := t.parseRows(r, table, colTypes); err != nil {
 					return err
 				}
-			} else if bytes.Equal(r.Str, []byte("sumrow")) {
+			case "sumrow":
 				if err := r.Expect(json.BEGIN_ARRAY); err != nil {
 					return err
 				}
 				if err := t.parseRow(r, table.EnsureSumRow(), colTypes); err != nil {
 					return err
 				}
-			} else {
+			default:
 				return fmt.Errorf("[%s] Unexpected field '%s' when restore table", tag, string(r.Str))
 			}
+
 		default:
 			return fmt.Errorf("[%s] should not happen 3", tag)
 		}
@@ -263,9 +266,8 @@ func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type) erro
 		cellVal, err := col.Unmarshal(r)
 		if err != nil {
 			return err
-		} else {
-			row.SetCell(idx, cellVal)
 		}
+		row.SetCell(idx, cellVal)
 	}
 	return r.Expect(json.END_ARRAY)
 }

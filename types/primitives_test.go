@@ -26,7 +26,8 @@ func TestInt(t *testing.T) {
 }
 
 func TestLong(t *testing.T) {
-	assertMarshalRoundTrip(t, "long", int64(0), int64(33), int64(-3124314), int64(9000000000000000), int64(-9000000000000000))
+	assertMarshalRoundTrip(t, "long", int64(0), int64(33), int64(-3124314),
+		int64(9000000000000000), int64(-9000000000000000))
 
 	// marshal as string if abs() > 9000000000000000
 	assertMarshal(t, "long", int64(9000000000000000), "9000000000000000")
@@ -51,9 +52,10 @@ func TestDecimal(t *testing.T) {
 	p := types.NewParser()
 	p.DefinePrimitiveTypes()
 
-	var vals []interface{}
-	for _, s := range []string{"0", "33", "-312.43", "9000000000000000", "-9000000000000000"} {
-		vals = append(vals, parseDecimal2(s))
+	strs := []string{"0", "33", "-312.43", "9000000000000000", "-9000000000000000"}
+	vals := make([]interface{}, len(strs))
+	for i, s := range strs {
+		vals[i] = parseDecimal2(s)
 	}
 	assertMarshalRoundTrip(t, "decimal(2)", vals...)
 }
