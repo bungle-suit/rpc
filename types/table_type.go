@@ -127,7 +127,7 @@ func (t tableType) parseMeta(r *json.Reader, table *table.Table) error {
 			}
 
 		default:
-			return fmt.Errorf("[%s] should not happend 2", tag)
+			return fmt.Errorf("[%s] should not happen 2", tag)
 		}
 	}
 }
@@ -169,7 +169,7 @@ func (t tableType) parseColumn(r *json.Reader, table *table.Table) error {
 			return nil
 
 		default:
-			return fmt.Errorf("[%s] should not happend 1", tag)
+			return fmt.Errorf("[%s] should not happen 1", tag)
 		}
 	}
 }
@@ -179,31 +179,33 @@ func (t tableType) afterMeta(r *json.Reader, table *table.Table) error {
 	if err != nil {
 		return err
 	}
+
 	for {
 		tt, err := r.Next()
 		if err != nil {
 			return err
 		}
+
 		switch tt {
 		case json.END_OBJECT:
 			return nil
 		case json.PROPERTY_NAME:
-			if bytes.Equal(r.Str, []byte{'r', 'o', 'w', 's'}) {
+			if bytes.Equal(r.Str, []byte("rows")) {
 				if err := t.parseRows(r, table, colTypes); err != nil {
 					return err
 				}
-			} else if bytes.Equal(r.Str, []byte{'s', 'u', 'm', 'r', 'o', 'w'}) {
+			} else if bytes.Equal(r.Str, []byte("sumrow")) {
 				if err := r.Expect(json.BEGIN_ARRAY); err != nil {
 					return err
 				}
-				if err := t.parseRow(r, table.EnsureSumRow(), colTypes, true); err != nil {
+				if err := t.parseRow(r, table.EnsureSumRow(), colTypes); err != nil {
 					return err
 				}
 			} else {
-				return json.GenericFormatError()
+				return fmt.Errorf("[%s] Unexpected field '%s' when restore table", tag, string(r.Str))
 			}
 		default:
-			return json.GenericFormatError()
+			return fmt.Errorf("[%s] should not happen 3", tag)
 		}
 	}
 }
@@ -235,29 +237,27 @@ func (t tableType) parseRows(r *json.Reader, table *table.Table, colTypes []Type
 		switch tt {
 		case json.BEGIN_ARRAY:
 			row := table.NewRow()
-			if err := t.parseRow(r, row, colTypes, false); err != nil {
+			if err := t.parseRow(r, row, colTypes); err != nil {
 				return err
 			}
 		case json.END_ARRAY:
 			return nil
 		default:
-			return json.GenericFormatError()
+			return fmt.Errorf("[%s] should not happen 4", tag)
 		}
 	}
 }
 
-func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type, isSumRow bool) error {
+func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type) error {
 	for idx, col := range colTypes {
-		if isSumRow {
-			tt, err := r.Next()
-			if err != nil {
-				return err
-			}
-			if tt == json.NULL {
-				continue
-			} else {
-				r.Undo()
-			}
+		tt, err := r.Next()
+		if err != nil {
+			return err
+		}
+		if tt == json.NULL {
+			continue
+		} else {
+			r.Undo()
 		}
 
 		cellVal, err := col.Unmarshal(r)

@@ -6,8 +6,7 @@ import (
 	"github.com/bungle-suit/rpc/extvals/table"
 )
 
-// TODO: continue after add Type.New()
-func _TestTable(t *testing.T) {
+func TestTable(t *testing.T) {
 	tbl := table.New()
 	assertMarshal(t, "table", tbl, "{}")
 	assertUnmarshal(t, "table", "{}", tbl)
@@ -15,7 +14,9 @@ func _TestTable(t *testing.T) {
 	tbl.NewCol("ID", "long")
 	tbl.NewCol("Name", "str")
 	assertMarshal(t, "table", tbl, `{"cols":[{"name":"ID","type":"long"},{"name":"Name","type":"str"}]}`)
-	assertUnmarshal(t, "table", `{"cols":[{"name":"ID","type":"long"},{"name":"Name","type":"str"}]}`, tbl)
+	assertUnmarshal(t, "table", `{
+		"cols":[{"name":"ID","type":"long"},{"name":"Name","type":"str"}]
+	}`, tbl)
 
 	row := tbl.NewRow()
 	row.SetCell(0, int64(123))

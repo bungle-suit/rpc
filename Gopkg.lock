@@ -3,11 +3,11 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:6bff4649b76d738cc4532dcbdbdf33e3828a8c8a7ee91b91a547b8660dceba5f"
+  digest = "1:afcf429656806ccb25c974e442e1526f038caea1528e6eecff5a6038a9728f32"
   name = "github.com/bungle-suit/json"
   packages = ["."]
   pruneopts = "UT"
-  revision = "82f93eb31aa654dfcf8adc5b512bf02d91e3ff07"
+  revision = "b2c2bf0c23fe39cd53724709bc6722d0908faf6c"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
