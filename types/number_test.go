@@ -13,8 +13,8 @@ func TestInt(t *testing.T) {
 	// should return error when parse number like string.
 	p := types.NewParser()
 	p.DefinePrimitiveTypes()
-	var v int32
-	assert.Error(t, types.Unmarshal(p, "int", []byte(`"1234"`), &v))
+	_, err := types.Unmarshal(p, "int", []byte(`"1234"`))
+	assert.Error(t, err)
 }
 
 func TestLong(t *testing.T) {

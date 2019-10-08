@@ -3,7 +3,6 @@ package types
 import (
 	"bytes"
 	"fmt"
-	"reflect"
 
 	"github.com/bungle-suit/json"
 	"github.com/bungle-suit/rpc/extvals/table"
@@ -74,34 +73,33 @@ func (tt tableType) writeRow(w *json.Writer, row table.Row, colTypes []Type, isS
 	return nil
 }
 
-func (t tableType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (t tableType) Unmarshal(r *json.Reader) (interface{}, error) {
 	if err := r.Expect(json.BEGIN_OBJECT); err != nil {
-		return err
+		return nil, err
 	}
 
 	result := table.New()
 	tt, err := r.Next()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	switch tt {
 	case json.END_OBJECT:
-		v.Elem().Set(reflect.ValueOf(result))
-		return nil
+		return result, nil
 
 	case json.PROPERTY_NAME:
 		if err := t.parseMeta(r, result); err != nil {
-			return err
+			return nil, err
 		}
 		if err := t.afterMeta(r, result); err != nil {
-			return err
+			return nil, err
 		}
-		v.Elem().Set(reflect.ValueOf(result))
-		return nil
-	}
+		return result, nil
 
-	return json.GenericFormatError()
+	default:
+		return nil, fmt.Errorf("[%s] Unexpected token while unmarshal table", tag)
+	}
 }
 
 func (t tableType) parseMeta(r *json.Reader, table *table.Table) error {
@@ -262,8 +260,8 @@ func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type, isSu
 			}
 		}
 
-		var cellVal interface{}
-		if err := col.Unmarshal(r, reflect.ValueOf(&cellVal)); err != nil {
+		cellVal, err := col.Unmarshal(r)
+		if err != nil {
 			return err
 		} else {
 			row.SetCell(idx, cellVal)

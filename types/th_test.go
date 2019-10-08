@@ -1,7 +1,6 @@
 package types_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/bungle-suit/rpc/extvals/decimal"
@@ -17,9 +16,9 @@ func assertMarshalRoundTrip(t *testing.T, ts string, vals ...interface{}) {
 		buf, err := types.Marshal(p, ts, v)
 		assert.NoError(t, err)
 
-		back := reflect.New(reflect.TypeOf(v))
-		assert.NoError(t, types.Unmarshal(p, ts, buf, back.Interface()))
-		assert.Equal(t, v, back.Elem().Interface())
+		back, err := types.Unmarshal(p, ts, buf)
+		assert.NoError(t, err)
+		assert.Equal(t, v, back)
 	}
 }
 
@@ -36,10 +35,9 @@ func assertUnmarshal(t *testing.T, ts, json string, exp interface{}) {
 	p := types.NewParser()
 	p.DefinePrimitiveTypes()
 
-	back := reflect.New(reflect.TypeOf(exp))
-
-	assert.NoError(t, types.Unmarshal(p, ts, []byte(json), back.Interface()))
-	assert.Equal(t, exp, back.Elem().Interface())
+	back, err := types.Unmarshal(p, ts, []byte(json))
+	assert.NoError(t, err)
+	assert.Equal(t, exp, back)
 }
 
 func parseDecimal2(s string) decimal.Decimal2 {

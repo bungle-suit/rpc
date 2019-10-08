@@ -1,7 +1,6 @@
 package types_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/bungle-suit/json"
@@ -15,7 +14,7 @@ func (fakeType) Marshal(w *json.Writer, v interface{}) error {
 	panic("not implemented")
 }
 
-func (fakeType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (fakeType) Unmarshal(r *json.Reader) (interface{}, error) {
 	panic("not implemented")
 }
 

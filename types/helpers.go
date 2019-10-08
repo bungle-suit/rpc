@@ -2,7 +2,6 @@ package types
 
 import (
 	"bytes"
-	"reflect"
 
 	"github.com/bungle-suit/json"
 )
@@ -24,12 +23,12 @@ func Marshal(p *Parser, ts string, v interface{}) ([]byte, error) {
 }
 
 // Unmarshal value from json
-func Unmarshal(p *Parser, ts string, data []byte, v interface{}) error {
+func Unmarshal(p *Parser, ts string, data []byte) (interface{}, error) {
 	t, err := p.Parse(ts)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	r := json.NewReader(data)
-	return t.Unmarshal(r, reflect.ValueOf(v))
+	return t.Unmarshal(r)
 }

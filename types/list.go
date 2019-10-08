@@ -1,8 +1,6 @@
 package types
 
 import (
-	"reflect"
-
 	"github.com/bungle-suit/json"
 )
 
@@ -14,6 +12,6 @@ func (listType) Marshal(w *json.Writer, v interface{}) error {
 	panic("not implemented")
 }
 
-func (listType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (listType) Unmarshal(r *json.Reader) (interface{}, error) {
 	panic("not implemented")
 }

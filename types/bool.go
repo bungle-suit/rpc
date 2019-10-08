@@ -1,8 +1,6 @@
 package types
 
 import (
-	"reflect"
-
 	"github.com/bungle-suit/json"
 )
 
@@ -18,13 +16,11 @@ func (b boolType) Marshal(w *json.Writer, v interface{}) error {
 	return nil
 }
 
-func (b boolType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (b boolType) Unmarshal(r *json.Reader) (interface{}, error) {
 	fv, err := r.ReadNumber()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	bv := fv != 0
-	v.Elem().SetBool(bv)
-	return nil
+	return fv != 0, nil
 }

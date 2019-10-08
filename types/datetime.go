@@ -1,7 +1,6 @@
 package types
 
 import (
-	"reflect"
 	"time"
 
 	"github.com/bungle-suit/json"
@@ -16,13 +15,11 @@ func (datetimeType) Marshal(w *json.Writer, v interface{}) error {
 	return nil
 }
 
-func (datetimeType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (datetimeType) Unmarshal(r *json.Reader) (interface{}, error) {
 	fv, err := r.ReadNumber()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	t := time.Unix(int64(fv), 0)
-	v.Elem().Set(reflect.ValueOf(t))
-	return nil
+	return time.Unix(int64(fv), 0), nil
 }

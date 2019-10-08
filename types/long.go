@@ -2,7 +2,6 @@ package types
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 
 	"github.com/bungle-suit/json"
@@ -16,15 +15,9 @@ func (intType) Marshal(w *json.Writer, v interface{}) error {
 	return nil
 }
 
-func (intType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (intType) Unmarshal(r *json.Reader) (interface{}, error) {
 	fv, err := r.ReadNumber()
-	if err != nil {
-		return err
-	}
-
-	// TODO: check fv do not have decimal part and in range.
-	v.Elem().SetInt(int64(fv))
-	return nil
+	return int32(fv), err
 }
 
 type longType struct{}
@@ -44,10 +37,10 @@ func (longType) Marshal(w *json.Writer, v interface{}) error {
 	return nil
 }
 
-func (longType) Unmarshal(r *json.Reader, v reflect.Value) error {
+func (longType) Unmarshal(r *json.Reader) (interface{}, error) {
 	tt, err := r.Next()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	var s string
@@ -56,15 +49,14 @@ func (longType) Unmarshal(r *json.Reader, v reflect.Value) error {
 	} else if tt == json.STRING {
 		s = string(r.Buf[r.Start+1 : r.End-1])
 	} else {
-		return fmt.Errorf("[%s] Unexpected long type", tag)
+		return nil, fmt.Errorf("[%s] Unexpected long type", tag)
 	}
 
 	i, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		return fmt.Errorf("[%s] Failed unmarshal '%s' to long: %w", tag, s, err)
+		return nil, fmt.Errorf("[%s] Failed unmarshal '%s' to long: %w", tag, s, err)
 	}
-	v.Elem().SetInt(i)
-	return nil
+	return i, nil
 }
 
 type floatType struct{}
@@ -75,12 +67,6 @@ func (floatType) Marshal(w *json.Writer, v interface{}) error {
 	return nil
 }
 
-func (floatType) Unmarshal(r *json.Reader, v reflect.Value) error {
-	fv, err := r.ReadNumber()
-	if err != nil {
-		return err
-	}
-
-	v.Elem().SetFloat(fv)
-	return nil
+func (floatType) Unmarshal(r *json.Reader) (interface{}, error) {
+	return r.ReadNumber()
 }

@@ -13,7 +13,7 @@ func TestVoid(t *testing.T) {
 	p := types.NewParser()
 	p.DefinePrimitiveTypes()
 
-	var back interface{}
-	assert.NoError(t, types.Unmarshal(p, "void", []byte("null"), &back))
+	back, err := types.Unmarshal(p, "void", []byte("null"))
+	assert.NoError(t, err)
 	assert.Nil(t, back)
 }
