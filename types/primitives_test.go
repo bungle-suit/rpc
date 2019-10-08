@@ -2,10 +2,18 @@ package types_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bungle-suit/rpc/types"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestBool(t *testing.T) {
+	assertMarshalRoundTrip(t, "bool", true, false)
+
+	assertMarshal(t, "bool", true, "1")
+	assertMarshal(t, "bool", false, "0")
+}
 
 func TestInt(t *testing.T) {
 	assertMarshalRoundTrip(t, "int", int32(0), int32(33), int32(-3124314))
@@ -48,4 +56,28 @@ func TestDecimal(t *testing.T) {
 		vals = append(vals, parseDecimal2(s))
 	}
 	assertMarshalRoundTrip(t, "decimal(2)", vals...)
+}
+
+func TestDateTime(t *testing.T) {
+	now := time.Now()
+	nowSnapToSecond := time.Date(now.Year(), now.Month(), now.Day(), now.Hour(), now.Minute(), now.Second(), 0, time.Local)
+	assertMarshalRoundTrip(t, "datetime", nowSnapToSecond)
+
+	assertMarshal(t, "datetime", time.Unix(0, 0), "0")
+	assertUnmarshal(t, "datetime", "0", time.Unix(0, 0))
+}
+
+func TestString(t *testing.T) {
+	assertMarshalRoundTrip(t, "str", "", `abc"foo"`)
+}
+
+func TestVoid(t *testing.T) {
+	assertMarshal(t, "void", nil, "null")
+
+	p := types.NewParser()
+	p.DefinePrimitiveTypes()
+
+	back, err := types.Unmarshal(p, "void", []byte("null"))
+	assert.NoError(t, err)
+	assert.Nil(t, back)
 }
