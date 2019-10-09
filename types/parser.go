@@ -109,12 +109,6 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.Define("table", tableType{p})
 	p.Define("object", objectType{p})
 
-	p.Define("bool?", nullBoolType{})
-	p.Define("int?", nullIntType{})
-	p.Define("long?", nullLongType{})
-	p.Define("double?", nullFloatType{})
-	p.Define("datetime?", nullDatetimeType{})
-
 	p.Define("decimal(0)", decimalType(0))
 	p.Define("decimal(1)", decimalType(1))
 	p.Define("decimal(2)", decimalType(2))
@@ -124,4 +118,21 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.Define("decimal(6)", decimalType(6))
 	p.Define("decimal(7)", decimalType(7))
 	p.Define("decimal(8)", decimalType(8))
+
+	p.Define("bool?", nullBoolType{})
+	p.Define("int?", nullIntType{})
+	p.Define("long?", nullLongType{})
+	p.Define("double?", nullFloatType{})
+	p.Define("datetime?", nullDatetimeType{})
+
+	p.Define("decimal(0)?", nullDecimalType(0))
+	p.Define("decimal(1)?", nullDecimalType(1))
+	p.Define("decimal(2)?", nullDecimalType(2))
+	p.Define("decimal(3)?", nullDecimalType(3))
+	p.Define("decimal(4)?", nullDecimalType(4))
+	p.Define("decimal(5)?", nullDecimalType(5))
+	p.Define("decimal(6)?", nullDecimalType(6))
+	p.Define("decimal(7)?", nullDecimalType(7))
+	p.Define("decimal(8)?", nullDecimalType(8))
+
 }

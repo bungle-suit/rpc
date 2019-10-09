@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/bungle-suit/rpc/extvals"
+	"github.com/bungle-suit/rpc/extvals/decimal"
 )
 
 func TestNullBool(t *testing.T) {
@@ -43,5 +44,12 @@ func TestNullDateTime(t *testing.T) {
 	assertMarshalRoundTrip(t, "datetime?",
 		extvals.NullTime{},
 		extvals.NullTime{V: time.Date(2019, 10, 9, 8, 54, 34, 0, time.Local), Valid: true},
+	)
+}
+
+func TestNullDecimal(t *testing.T) {
+	assertMarshalRoundTrip(t, "decimal(2)?",
+		decimal.NullDecimal2{},
+		parseNullDecimal2("3.34"),
 	)
 }

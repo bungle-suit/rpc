@@ -48,3 +48,14 @@ func parseDecimal2(s string) decimal.Decimal2 {
 
 	return decimal.Decimal2(d)
 }
+
+func parseNullDecimal2(s string) decimal.NullDecimal2 {
+	d, err := decimal.FromStringWithScale(s, 2)
+	if err != nil {
+		panic(err)
+	}
+
+	return decimal.NullDecimal2(
+		decimal.NullDecimal{V: d, Valid: true},
+	)
+}
