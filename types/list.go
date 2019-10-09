@@ -8,8 +8,8 @@ import (
 
 type listType struct {
 	*Parser
-	inner   Type
-	innerTS string
+	inner Type
+	ts    string
 }
 
 func (i listType) Marshal(w *json.Writer, val interface{}) error {
@@ -29,11 +29,11 @@ func (i listType) Unmarshal(r *json.Reader) (interface{}, error) {
 		return nil, err
 	}
 
-	itemGoType, err := i.ParseGoType(i.innerTS)
+	goType, err := i.ParseGoType(i.ts)
 	if err != nil {
 		return nil, err
 	}
-	list := reflect.MakeSlice(reflect.SliceOf(itemGoType), 0, 0)
+	list := reflect.MakeSlice(goType, 0, 0)
 	for t, err := r.Next(); t != json.EndArray; t, err = r.Next() {
 		if err != nil {
 			return nil, err

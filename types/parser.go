@@ -73,13 +73,12 @@ func (p *Parser) parseComposite(ts string) (Type, error) {
 
 	switch n.Type() {
 	case ast.List:
-		innerTS := n.(ast.ItemNode).Item
-		inner, err := p.parse(innerTS)
+		inner, err := p.parse(n.(ast.ItemNode).Item)
 		if err != nil {
 			return nil, err
 		}
 
-		return listType{p, inner, innerTS}, nil
+		return listType{p, inner, ts}, nil
 
 	case ast.Dict:
 		innerTS := n.(ast.ItemNode).Item
