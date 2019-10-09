@@ -30,6 +30,12 @@ type NullTime struct {
 	Valid bool
 }
 
+// NullFloat64 represents a float64 value that may be null.
+type NullFloat64 struct {
+	V     float64
+	Valid bool
+}
+
 func (i NullInt32) IsNull() bool {
 	return !i.Valid
 }
@@ -59,5 +65,13 @@ func (i NullTime) IsNull() bool {
 }
 
 func (i NullTime) Val() interface{} {
+	return i.V
+}
+
+func (i NullFloat64) IsNull() bool {
+	return !i.Valid
+}
+
+func (i NullFloat64) Val() interface{} {
 	return i.V
 }
