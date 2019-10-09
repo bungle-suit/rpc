@@ -61,6 +61,8 @@ func Registry() *bsoncodec.Registry {
 		reflect.TypeOf(extvals.NullBool{}), newNullableCodec(registryNotNull, reflect.TypeOf(true)))
 	builder.RegisterCodec(
 		reflect.TypeOf(extvals.NullTime{}), newNullableCodec(registryNotNull, reflect.TypeOf(time.Time{})))
+	builder.RegisterCodec(
+		reflect.TypeOf(extvals.NullFloat64{}), newNullableCodec(registryNotNull, reflect.TypeOf(float64(0))))
 
 	return builder.Build()
 }

@@ -121,3 +121,30 @@ func TestNullTime(t *testing.T) {
 		assert.Equal(t, back, rec)
 	}
 }
+
+func TestNullFloat64(t *testing.T) {
+	registry := mybson.Registry()
+	tests := []extvals.NullFloat64{
+		{},
+		{V: 33.34, Valid: true},
+	}
+
+	for _, item := range tests {
+		rec := struct{ A extvals.NullFloat64 }{item}
+		buf, err := bson.MarshalWithRegistry(registry, rec)
+		assert.NoError(t, err)
+
+		var doc bson.M
+		assert.NoError(t, bson.Unmarshal(buf, &doc))
+		if !item.Valid {
+			assert.Nil(t, doc["a"])
+		} else {
+			assert.Equal(t, item.V, doc["a"].(float64))
+		}
+
+		back := rec
+		back.A = extvals.NullFloat64{}
+		assert.NoError(t, bson.UnmarshalWithRegistry(registry, buf, &back))
+		assert.Equal(t, back, rec)
+	}
+}
