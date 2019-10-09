@@ -187,17 +187,41 @@ func (p *Parser) defineNullTypes() {
 func (p *Parser) ParseGoType(ts string) (reflect.Type, error) {
 	p.lgo.Lock()
 	t, ok := p.goCached[ts]
+	p.lgo.Unlock()
+
 	if ok {
-		p.lgo.Unlock()
 		return t, nil
 	}
 
-	p.lgo.Unlock()
-	return nil, fmt.Errorf("[%s] Failed find golang type for '%s'", tag, ts)
+	ty, err := p.parseCompositeGoType(ts)
+	if err != nil {
+		return nil, err
+	}
+
+	p.DefineGoType(ts, ty)
+	return ty, nil
 }
 
 func (p *Parser) DefineGoType(ts string, ty reflect.Type) {
 	p.lgo.Lock()
 	p.goCached[ts] = ty
 	p.lgo.Unlock()
+}
+
+func (p *Parser) parseCompositeGoType(ts string) (reflect.Type, error) {
+	n, err := ast.Parse(ts)
+	if err != nil {
+		return nil, err
+	}
+
+	switch n.Type() {
+	case ast.List:
+		inner, err := p.ParseGoType(n.(ast.ItemNode).Item)
+		if err != nil {
+			return nil, err
+		}
+		return reflect.SliceOf(inner), nil
+	}
+
+	return nil, fmt.Errorf("[%s] Failed find golang type for '%s'", tag, ts)
 }

@@ -8,4 +8,10 @@ func TestList(t *testing.T) {
 
 	assertUnmarshal(t, "[int]", "[]", []int32{})
 	assertUnmarshal(t, "[int]", "[3,4]", []int32{3, 4})
+
+	assertMarshal(t, "[[int]]", [][]int32{}, "[]")
+	assertMarshal(t, "[[int]]", [][]int32{[]int32{3}, []int32{}}, "[[3],[]]")
+
+	assertUnmarshal(t, "[[int]]", "[]", [][]int32{})
+	assertUnmarshal(t, "[[int]]", "[[3],[]]", [][]int32{[]int32{3}, []int32{}})
 }
