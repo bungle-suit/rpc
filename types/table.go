@@ -253,14 +253,8 @@ func (t tableType) parseRows(r *json.Reader, table *table.Table, colTypes []Type
 
 func (t tableType) parseRow(r *json.Reader, row table.Row, colTypes []Type) error {
 	for idx, col := range colTypes {
-		tt, err := r.Next()
-		if err != nil {
-			return err
-		}
-		if tt == json.Null {
+		if isNullToken(r) {
 			continue
-		} else {
-			r.Undo()
 		}
 
 		cellVal, err := col.Unmarshal(r)
