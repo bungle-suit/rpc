@@ -5,6 +5,18 @@ import (
 	"github.com/bungle-suit/rpc/extvals"
 )
 
+// isNullToken returns true if next token is json.Null,
+// undo reader if not.
+func isNullToken(r *json.Reader) bool {
+	tt, _ := r.Next()
+	if tt == json.Null {
+		return true
+	}
+
+	r.Undo()
+	return false
+}
+
 type nullBoolType struct{}
 
 func (nullBoolType) Marshal(w *json.Writer, v interface{}) error {
@@ -29,14 +41,26 @@ func (nullBoolType) Unmarshal(r *json.Reader) (v interface{}, err error) {
 	return extvals.NullBool{V: bv.(bool), Valid: true}, nil
 }
 
-// isNullToken returns true if next token is json.Null,
-// undo reader if not.
-func isNullToken(r *json.Reader) bool {
-	tt, _ := r.Next()
-	if tt == json.Null {
-		return true
+type nullIntType struct{}
+
+func (n nullIntType) Marshal(w *json.Writer, v interface{}) error {
+	val := v.(extvals.NullInt32)
+	if !val.Valid {
+		w.WriteNull()
+		return nil
 	}
 
-	r.Undo()
-	return false
+	return intType{}.Marshal(w, val.V)
+}
+
+func (n nullIntType) Unmarshal(r *json.Reader) (v interface{}, err error) {
+	if isNullToken(r) {
+		return extvals.NullInt32{}, nil
+	}
+
+	bv, err := intType{}.Unmarshal(r)
+	if err != nil {
+		return nil, err
+	}
+	return extvals.NullInt32{V: bv.(int32), Valid: true}, nil
 }
