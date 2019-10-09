@@ -81,13 +81,12 @@ func (p *Parser) parseComposite(ts string) (Type, error) {
 		return listType{p, inner, ts}, nil
 
 	case ast.Dict:
-		innerTS := n.(ast.ItemNode).Item
-		inner, err := p.parse(innerTS)
+		inner, err := p.parse(n.(ast.ItemNode).Item)
 		if err != nil {
 			return nil, err
 		}
 
-		return dictType{p, inner, innerTS}, nil
+		return dictType{p, inner, ts}, nil
 	}
 
 	return nil, errors.Errorf("[%s] Failed parse type '%s'", tag, ts)
@@ -220,6 +219,13 @@ func (p *Parser) parseCompositeGoType(ts string) (reflect.Type, error) {
 			return nil, err
 		}
 		return reflect.SliceOf(inner), nil
+
+	case ast.Dict:
+		inner, err := p.ParseGoType(n.(ast.ItemNode).Item)
+		if err != nil {
+			return nil, err
+		}
+		return reflect.MapOf(reflect.TypeOf(""), inner), nil
 	}
 
 	return nil, fmt.Errorf("[%s] Failed find golang type for '%s'", tag, ts)

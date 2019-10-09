@@ -8,8 +8,8 @@ import (
 
 type dictType struct {
 	*Parser
-	inner   Type
-	innerTS string
+	inner Type
+	ts    string
 }
 
 func (d dictType) Marshal(w *json.Writer, val interface{}) error {
@@ -32,11 +32,11 @@ func (d dictType) Unmarshal(r *json.Reader) (interface{}, error) {
 		return nil, err
 	}
 
-	innerType, err := d.ParseGoType(d.innerTS)
+	goType, err := d.ParseGoType(d.ts)
 	if err != nil {
 		return nil, err
 	}
-	dict := reflect.MakeMap(reflect.MapOf(reflect.TypeOf(""), innerType))
+	dict := reflect.MakeMap(goType)
 	for tt, err := r.Next(); tt != json.EndObject; tt, err = r.Next() {
 		if err != nil {
 			return nil, err
