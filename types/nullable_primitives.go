@@ -64,3 +64,27 @@ func (n nullIntType) Unmarshal(r *json.Reader) (v interface{}, err error) {
 	}
 	return extvals.NullInt32{V: bv.(int32), Valid: true}, nil
 }
+
+type nullLongType struct{}
+
+func (n nullLongType) Marshal(w *json.Writer, v interface{}) error {
+	val := v.(extvals.NullInt64)
+	if !val.Valid {
+		w.WriteNull()
+		return nil
+	}
+
+	return longType{}.Marshal(w, val.V)
+}
+
+func (n nullLongType) Unmarshal(r *json.Reader) (v interface{}, err error) {
+	if isNullToken(r) {
+		return extvals.NullInt64{}, nil
+	}
+
+	bv, err := longType{}.Unmarshal(r)
+	if err != nil {
+		return nil, err
+	}
+	return extvals.NullInt64{V: bv.(int64), Valid: true}, nil
+}
