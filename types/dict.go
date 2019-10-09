@@ -1,17 +1,52 @@
 package types
 
 import (
+	"reflect"
+
 	"github.com/bungle-suit/json"
 )
 
 type dictType struct {
-	inner Type
+	*Parser
+	inner   Type
+	innerTS string
 }
 
-func (dictType) Marshal(w *json.Writer, v interface{}) error {
-	panic("not implemented")
+func (d dictType) Marshal(w *json.Writer, val interface{}) error {
+	m := reflect.ValueOf(val)
+
+	w.BeginObject()
+	for _, k := range m.MapKeys() {
+		v := m.MapIndex(k)
+		w.WriteName(k.String())
+		d.inner.Marshal(w, v.Interface())
+	}
+	w.EndObject()
+	return nil
 }
 
-func (dictType) Unmarshal(r *json.Reader) (interface{}, error) {
-	panic("not implemented")
+func (d dictType) Unmarshal(r *json.Reader) (interface{}, error) {
+	if err := r.Expect(json.BeginObject); err != nil {
+		return nil, err
+	}
+
+	innerType, err := d.ParseGoType(d.innerTS)
+	if err != nil {
+		return nil, err
+	}
+	dict := reflect.MakeMap(reflect.MapOf(reflect.TypeOf(""), innerType))
+	for tt, err := r.Next(); tt != json.EndObject; tt, err = r.Next() {
+		if err != nil {
+			return nil, err
+		}
+		// spork/json ensure here must be property name,
+		// and other Types are Implemented correctly.
+		name := string(r.Str)
+		if val, err := d.inner.Unmarshal(r); err != nil {
+			return nil, err
+		} else {
+			dict.SetMapIndex(reflect.ValueOf(name), reflect.ValueOf(val))
+		}
+	}
+	return dict.Interface(), nil
 }

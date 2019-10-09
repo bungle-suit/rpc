@@ -82,12 +82,13 @@ func (p *Parser) parseComposite(ts string) (Type, error) {
 		return listType{p, inner, innerTS}, nil
 
 	case ast.Dict:
-		inner, err := p.parse(n.(ast.ItemNode).Item)
+		innerTS := n.(ast.ItemNode).Item
+		inner, err := p.parse(innerTS)
 		if err != nil {
 			return nil, err
 		}
 
-		return dictType{inner}, nil
+		return dictType{p, inner, innerTS}, nil
 	}
 
 	return nil, errors.Errorf("[%s] Failed parse type '%s'", tag, ts)
