@@ -2,6 +2,7 @@ package types_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/bungle-suit/rpc/extvals"
 )
@@ -35,5 +36,12 @@ func TestNullFloat(t *testing.T) {
 	assertMarshalRoundTrip(t, "double?",
 		extvals.NullFloat64{},
 		extvals.NullFloat64{V: 34.34, Valid: true},
+	)
+}
+
+func TestNullDateTime(t *testing.T) {
+	assertMarshalRoundTrip(t, "datetime?",
+		extvals.NullTime{},
+		extvals.NullTime{V: time.Date(2019, 10, 9, 8, 54, 34, 0, time.Local), Valid: true},
 	)
 }

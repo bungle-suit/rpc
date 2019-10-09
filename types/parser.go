@@ -113,6 +113,7 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.Define("int?", nullIntType{})
 	p.Define("long?", nullLongType{})
 	p.Define("double?", nullFloatType{})
+	p.Define("datetime?", nullDatetimeType{})
 
 	p.Define("decimal(0)", decimalType(0))
 	p.Define("decimal(1)", decimalType(1))

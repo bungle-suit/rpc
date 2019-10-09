@@ -1,6 +1,8 @@
 package types
 
 import (
+	"time"
+
 	"github.com/bungle-suit/json"
 	"github.com/bungle-suit/rpc/extvals"
 )
@@ -111,4 +113,28 @@ func (n nullFloatType) Unmarshal(r *json.Reader) (v interface{}, err error) {
 		return nil, err
 	}
 	return extvals.NullFloat64{V: bv.(float64), Valid: true}, nil
+}
+
+type nullDatetimeType struct{}
+
+func (n nullDatetimeType) Marshal(w *json.Writer, v interface{}) error {
+	val := v.(extvals.NullTime)
+	if !val.Valid {
+		w.WriteNull()
+		return nil
+	}
+
+	return datetimeType{}.Marshal(w, val.V)
+}
+
+func (n nullDatetimeType) Unmarshal(r *json.Reader) (v interface{}, err error) {
+	if isNullToken(r) {
+		return extvals.NullTime{}, nil
+	}
+
+	bv, err := datetimeType{}.Unmarshal(r)
+	if err != nil {
+		return nil, err
+	}
+	return extvals.NullTime{V: bv.(time.Time), Valid: true}, nil
 }
