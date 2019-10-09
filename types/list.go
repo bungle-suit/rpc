@@ -7,7 +7,9 @@ import (
 )
 
 type listType struct {
-	inner Type
+	*Parser
+	inner   Type
+	innerTS string
 }
 
 func (i listType) Marshal(w *json.Writer, val interface{}) error {
@@ -23,22 +25,25 @@ func (i listType) Marshal(w *json.Writer, val interface{}) error {
 }
 
 func (i listType) Unmarshal(r *json.Reader) (interface{}, error) {
-	panic("not implemented")
-	// if err := r.Expect(json.BeginArray); err != nil {
-	// 	return nil, err
-	// }
+	if err := r.Expect(json.BeginArray); err != nil {
+		return nil, err
+	}
 
-	// list := reflect.MakeSlice(i.Type(), 0, 0)
-	// for t, err := r.Next(); t != json.EndArray; t, err = r.Next() {
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	r.Undo()
-	// 	if v, err := i.inner.Unmarshal(r); err != nil {
-	// 		return nil, err
-	// 	} else {
-	// 		list = reflect.Append(list, reflect.ValueOf(v))
-	// 	}
-	// }
-	// return list.Interface(), nil
+	itemGoType, err := i.ParseGoType(i.innerTS)
+	if err != nil {
+		return nil, err
+	}
+	list := reflect.MakeSlice(reflect.SliceOf(itemGoType), 0, 0)
+	for t, err := r.Next(); t != json.EndArray; t, err = r.Next() {
+		if err != nil {
+			return nil, err
+		}
+		r.Undo()
+		if v, err := i.inner.Unmarshal(r); err != nil {
+			return nil, err
+		} else {
+			list = reflect.Append(list, reflect.ValueOf(v))
+		}
+	}
+	return list.Interface(), nil
 }
