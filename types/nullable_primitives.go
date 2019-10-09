@@ -88,3 +88,27 @@ func (n nullLongType) Unmarshal(r *json.Reader) (v interface{}, err error) {
 	}
 	return extvals.NullInt64{V: bv.(int64), Valid: true}, nil
 }
+
+type nullFloatType struct{}
+
+func (n nullFloatType) Marshal(w *json.Writer, v interface{}) error {
+	val := v.(extvals.NullFloat64)
+	if !val.Valid {
+		w.WriteNull()
+		return nil
+	}
+
+	return floatType{}.Marshal(w, val.V)
+}
+
+func (n nullFloatType) Unmarshal(r *json.Reader) (v interface{}, err error) {
+	if isNullToken(r) {
+		return extvals.NullFloat64{}, nil
+	}
+
+	bv, err := floatType{}.Unmarshal(r)
+	if err != nil {
+		return nil, err
+	}
+	return extvals.NullFloat64{V: bv.(float64), Valid: true}, nil
+}

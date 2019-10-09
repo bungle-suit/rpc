@@ -30,3 +30,10 @@ func TestNullLong(t *testing.T) {
 		extvals.NullInt64{V: 9000000000000001, Valid: true},
 	)
 }
+
+func TestNullFloat(t *testing.T) {
+	assertMarshalRoundTrip(t, "double?",
+		extvals.NullFloat64{},
+		extvals.NullFloat64{V: 34.34, Valid: true},
+	)
+}
