@@ -19,7 +19,9 @@ func (d dictType) Marshal(w *json.Writer, val interface{}) error {
 	for _, k := range m.MapKeys() {
 		v := m.MapIndex(k)
 		w.WriteName(k.String())
-		d.inner.Marshal(w, v.Interface())
+		if err := d.inner.Marshal(w, v.Interface()); err != nil {
+			return err
+		}
 	}
 	w.EndObject()
 	return nil
@@ -42,11 +44,12 @@ func (d dictType) Unmarshal(r *json.Reader) (interface{}, error) {
 		// spork/json ensure here must be property name,
 		// and other Types are Implemented correctly.
 		name := string(r.Str)
-		if val, err := d.inner.Unmarshal(r); err != nil {
+		val, err := d.inner.Unmarshal(r)
+		if err != nil {
 			return nil, err
-		} else {
-			dict.SetMapIndex(reflect.ValueOf(name), reflect.ValueOf(val))
 		}
+
+		dict.SetMapIndex(reflect.ValueOf(name), reflect.ValueOf(val))
 	}
 	return dict.Interface(), nil
 }

@@ -179,28 +179,7 @@ func (n nullDecimalType) Marshal(w *json.Writer, v interface{}) error {
 
 func (n nullDecimalType) Unmarshal(r *json.Reader) (v interface{}, err error) {
 	if isNullToken(r) {
-		switch int(n) {
-		case 0:
-			return decimal.NullDecimal0{}, nil
-		case 1:
-			return decimal.NullDecimal1{}, nil
-		case 2:
-			return decimal.NullDecimal2{}, nil
-		case 3:
-			return decimal.NullDecimal3{}, nil
-		case 4:
-			return decimal.NullDecimal4{}, nil
-		case 5:
-			return decimal.NullDecimal5{}, nil
-		case 6:
-			return decimal.NullDecimal6{}, nil
-		case 7:
-			return decimal.NullDecimal7{}, nil
-		case 8:
-			return decimal.NullDecimal8{}, nil
-		default:
-			return nil, fmt.Errorf("[%s] Unknown nullable decimal scale: %d", tag, int(n))
-		}
+		return n.empty()
 	}
 
 	bv, err := decimalType(int(n)).Unmarshal(r)
@@ -245,6 +224,31 @@ func (n nullDecimalType) Unmarshal(r *json.Reader) (v interface{}, err error) {
 		return decimal.NullDecimal8(
 			decimal.NullDecimal{V: dv, Valid: true},
 		), nil
+	default:
+		return nil, fmt.Errorf("[%s] Unknown nullable decimal scale: %d", tag, int(n))
+	}
+}
+
+func (n nullDecimalType) empty() (interface{}, error) {
+	switch int(n) {
+	case 0:
+		return decimal.NullDecimal0{}, nil
+	case 1:
+		return decimal.NullDecimal1{}, nil
+	case 2:
+		return decimal.NullDecimal2{}, nil
+	case 3:
+		return decimal.NullDecimal3{}, nil
+	case 4:
+		return decimal.NullDecimal4{}, nil
+	case 5:
+		return decimal.NullDecimal5{}, nil
+	case 6:
+		return decimal.NullDecimal6{}, nil
+	case 7:
+		return decimal.NullDecimal7{}, nil
+	case 8:
+		return decimal.NullDecimal8{}, nil
 	default:
 		return nil, fmt.Errorf("[%s] Unknown nullable decimal scale: %d", tag, int(n))
 	}

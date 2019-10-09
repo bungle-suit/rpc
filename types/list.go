@@ -39,11 +39,13 @@ func (i listType) Unmarshal(r *json.Reader) (interface{}, error) {
 			return nil, err
 		}
 		r.Undo()
-		if v, err := i.inner.Unmarshal(r); err != nil {
+
+		v, err := i.inner.Unmarshal(r)
+		if err != nil {
 			return nil, err
-		} else {
-			list = reflect.Append(list, reflect.ValueOf(v))
 		}
+
+		list = reflect.Append(list, reflect.ValueOf(v))
 	}
 	return list.Interface(), nil
 }

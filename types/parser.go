@@ -148,6 +148,10 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.Define("decimal(8)", decimalType(8))
 	p.DefineGoType("decimal(8)", reflect.TypeOf(decimal.Decimal8{}))
 
+	p.defineNullTypes()
+}
+
+func (p *Parser) defineNullTypes() {
 	p.Define("bool?", nullBoolType{})
 	p.DefineGoType("bool?", reflect.TypeOf(extvals.NullBool{}))
 	p.Define("int?", nullIntType{})
@@ -177,7 +181,6 @@ func (p *Parser) DefinePrimitiveTypes() {
 	p.DefineGoType("decimal(7)?", reflect.TypeOf(decimal.NullDecimal7{}))
 	p.Define("decimal(8)?", nullDecimalType(8))
 	p.DefineGoType("decimal(8)?", reflect.TypeOf(decimal.NullDecimal8{}))
-
 }
 
 // ParseGoType returns golang type of corresponding type string.
